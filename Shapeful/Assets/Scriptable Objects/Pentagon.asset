@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb580261ad683bd42b7734b2a733244a, type: 3}
+  m_Name: Pentagon
+  m_EditorClassIdentifier: 
+  vertexCount: 5
+  _vertices:
+  - {x: 1, y: 0, z: 0}
+  - {x: 0.309, y: 0.951, z: 0}
+  - {x: -0.809, y: 0.588, z: 0}
+  - {x: -0.809, y: -0.588, z: 0}
+  - {x: 0.309, y: -0.951, z: 0}
+  canSpin: 1
+  spinSpeed: {x: 40, y: 90}
+  shrinkSpeed: 3
+  initalScale: 10
