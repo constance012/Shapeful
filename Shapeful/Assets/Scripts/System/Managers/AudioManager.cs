@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class AudioManager : Singleton<AudioManager>
+public class AudioManager : PersistentSingleton<AudioManager>
 {
 	// An array of audios.
 	public Audio[] audioArray;
@@ -21,6 +21,11 @@ public class AudioManager : Singleton<AudioManager>
 			audio.source.volume = audio.volume;
 			audio.source.pitch = audio.pitch;
 		}
+	}
+
+	private void Start()
+	{
+		Play("Main Theme");
 	}
 
 	/// <summary>

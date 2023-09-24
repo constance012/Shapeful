@@ -28,7 +28,7 @@ namespace CSTGames.DataPersistence
 		/// Load the data from a save slot using Newtonsoft's JSON.Net.
 		/// </summary>
 		/// <param name="saveSlotID"> The ID of the save slot to load data from. </param>
-		/// <returns>The loaded TData</returns>
+		/// <returns>The loaded Data</returns>
 		public TData LoadDataFromFile(string saveSlotID)
 		{
 			if (saveSlotID == null)
@@ -72,9 +72,9 @@ namespace CSTGames.DataPersistence
 		}
 
 		/// <summary>
-		/// Load the data from a standalone file using Unity's JsonUtility.
+		/// Load the data from a standalone file using Newtonsoft's JSON.Net.
 		/// </summary>
-		/// <returns>The loaded TData</returns>
+		/// <returns>The loaded Data</returns>
 		public TData LoadDataFromFile()
 		{
 			string fullPath = Path.Combine(directory, subFolders, fileName);
@@ -84,23 +84,23 @@ namespace CSTGames.DataPersistence
 			{
 				try
 				{
-					string json = "";
+					string serializedData = "";
 
 					// Read the serialized data.
 					using (FileStream file = new FileStream(fullPath, FileMode.Open))
 					{
 						using (StreamReader reader = new StreamReader(file))
 						{
-							json = reader.ReadToEnd();
+							serializedData = reader.ReadToEnd();
 						}
 					}
 
 					// Decrypt the data (Optional).
 					if (useEncryption)
-						json = EncryptOrDecrypt(json);
+						serializedData = EncryptOrDecrypt(serializedData);
 
 					// Deserialize data.
-					loadedData = JsonUtility.FromJson<TData>(json);
+					loadedData = JsonConvert.DeserializeObject<TData>(serializedData);
 				}
 				catch (Exception ex)
 				{
@@ -155,7 +155,7 @@ namespace CSTGames.DataPersistence
 		}
 
 		/// <summary>
-		/// Save the data of type TData using Unity's JsonUtility.
+		/// Save the data of type TData using Newtonsoft's JSON.Net.
 		/// </summary>
 		/// <param name="dataToSave"> The data object to save. </param>
 		public void SaveDataToFile(TData dataToSave)
@@ -169,18 +169,18 @@ namespace CSTGames.DataPersistence
 					Directory.CreateDirectory(parentDirectory);
 
 				// Serialize data.
-				string json = JsonUtility.ToJson(dataToSave, true);
+				string serializedData = JsonConvert.SerializeObject(dataToSave, Formatting.Indented);
 
 				// Encrypt the data (Optional).
 				if (useEncryption)
-					json = EncryptOrDecrypt(json);
+					serializedData = EncryptOrDecrypt(serializedData);
 
 				// Write the serialized data to file.
 				using (FileStream file = new FileStream(fullPath, FileMode.Create))
 				{
 					using StreamWriter writer = new StreamWriter(file);
 					{
-						writer.Write(json);
+						writer.Write(serializedData);
 					}
 				}
 			}

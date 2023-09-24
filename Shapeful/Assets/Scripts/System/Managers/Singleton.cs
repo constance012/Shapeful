@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Makes a temporary singleton reference for the current scene only, which will be destroy upon scene transitions.
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
 	public static T Instance { get; protected set; }
 
-	private bool _hasSingleton;
+	protected bool _hasSingleton;
 
 	protected virtual void Awake()
 	{

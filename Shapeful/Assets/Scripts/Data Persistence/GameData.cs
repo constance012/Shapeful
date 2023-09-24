@@ -1,15 +1,21 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 
 namespace CSTGames.DataPersistence
 {
 	[Serializable]
-	public struct GameData
+	public class GameData
 	{
 		public int highscore;
+		public Color playerColor;
 
-		public GameData(int highscore)
+		/// <summary>
+		/// Initialize with default values of the data.
+		/// </summary>
+		public GameData()
 		{
-			this.highscore = highscore;
+			this.highscore = 0;
+			this.playerColor = Color.white;
 		}
 	}
 }

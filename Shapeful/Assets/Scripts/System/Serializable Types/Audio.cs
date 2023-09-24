@@ -25,7 +25,7 @@ public class Audio
 	public float volume = 1f;
 
 	[Range(-3f, 3f)]
-	public float pitch = .9f;
+	public float pitch = 1f;
 
 	public bool loop;
 	[HideInInspector] public AudioSource source;

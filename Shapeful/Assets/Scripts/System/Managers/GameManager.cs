@@ -2,47 +2,51 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using CSTGames.DataPersistence;
+using UnityEngine.Events;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 {
+	[Header("Events"), Space]
+	public UnityEvent onGameOver = new UnityEvent();
+
 	[Header("Reference"), Space]
-	[SerializeField] private TextMeshProUGUI scoreText;
+	[SerializeField] private TextMeshProUGUI gameScoreText;
 	[SerializeField] private TextMeshProUGUI healthText;
 
 	[Space]
 	[SerializeField] private GameObject normalGamePanel;
 	[SerializeField] private GameObject gameOverPanel;
+	
+	[Space]
 	[SerializeField] private TextMeshProUGUI highscoreText;
+	[SerializeField] private TextMeshProUGUI summaryScoreText;
 
 	[HideInInspector] public bool gameOver;
 
-	[Header("Save File Configurations")]
-	[SerializeField] private string subFolder;
-	[SerializeField] private string fileName;
-	[SerializeField] private bool useEncryption;
-
 	// Private fields.
-	private SaveFileHandler<GameData> _saveHandler;
-	private GameData _gameData;
+	private int _highscore = 0;
 	private int _score = 0;
-
-	protected override void Awake()
-	{
-		base.Awake();
-		_saveHandler = new SaveFileHandler<GameData>(Application.persistentDataPath, subFolder, fileName, useEncryption);
-	}
 
 	private void Start()
 	{
-		_gameData = _saveHandler.LoadDataFromFile();
+		gameScoreText.text = _score.ToString();
+		onGameOver.AddListener(() => ShapeSpawner.Instance.gameObject.SetActive(false));
+	}
 
-		scoreText.text = _score.ToString();
+	public void LoadData(GameData data)
+	{
+		_highscore = data.highscore;
+	}
+
+	public void SaveData(GameData data)
+	{
+		data.highscore = _highscore;
 	}
 
 	public void UpdateScore()
 	{
 		_score++;
-		scoreText.text = _score.ToString();
+		gameScoreText.text = _score.ToString();
 
 		if (_score % 10 == 0)
 		{
@@ -54,38 +58,41 @@ public class GameManager : Singleton<GameManager>
 	{
 		if (health == 0)
 		{
-			GameOver();
+			gameOver = true;
+			onGameOver?.Invoke();
+			Invoke("ShowGameOverScreen", 1.5f);
 		}
 
 		healthText.text = health.ToString();
 	}
 
-	public void GameOver()
+	public void ShowGameOverScreen()
 	{
-		if (_score > _gameData.highscore)
+		if (_score > _highscore)
 		{
-			highscoreText.text = $"NEW BEST: {_score}";
-			_gameData.highscore = _score;
+			highscoreText.text = $"<color=#B02E2E> NEW BEST: {_score} </color>";
+			summaryScoreText.text = $"----------------\nGOOD JOB, MATE!";
+
+			_highscore = _score;
+			GameDataManager.Instance.SaveGame();
 		}
 		else
-			highscoreText.text = $"BEST: {_gameData.highscore}";
-
-		_saveHandler.SaveDataToFile(_gameData);
+		{
+			highscoreText.text = $"BEST: {_highscore}";
+			summaryScoreText.text = $"----------------\nCURRENT: {_score}";
+		}
 
 		normalGamePanel.SetActive(false);
 		gameOverPanel.SetActive(true);
-
-		ShapeSpawner.Instance.gameObject.SetActive(false);
-		gameOver = true;
 	}
 
 	public void RestartGame()
 	{
-		SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
+		LevelManager.Instance.ReloadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	public void BackToMenu()
 	{
-		SceneManager.LoadSceneAsync("Scenes/Menu");
+		LevelManager.Instance.LoadScene("Scenes/Menu");
 	}
 }
