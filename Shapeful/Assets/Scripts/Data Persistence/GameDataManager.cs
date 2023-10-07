@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace CSTGames.DataPersistence
 {
@@ -15,6 +16,7 @@ namespace CSTGames.DataPersistence
 		[SerializeField] private string fileName;
 		[SerializeField] private bool useEncryption;
 
+		// Private fields.
 		private List<ISaveDataTransceiver> _transceivers;
 		private SaveFileHandler<GameData> _saveHandler;
 		private GameData _currentData;
@@ -87,11 +89,16 @@ namespace CSTGames.DataPersistence
 				return;
 			}
 
+			// Notify all transceivers to write their data into the current data object.
 			foreach (ISaveDataTransceiver transceiver in _transceivers)
 			{
 				transceiver.SaveData(_currentData);
 			}
 
+			// Timestamp the data.
+			_currentData.lastUpdated = DateTime.Now.ToBinary();
+
+			// Save that data into a file on the local machine.
 			_saveHandler.SaveDataToFile(_currentData);
 		}
 

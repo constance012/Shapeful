@@ -7,14 +7,16 @@ public class Player : MonoBehaviour
 	[SerializeField] private float moveSpeed;
 
 	[Header("Health"), Space]
-	public int health;
+	public int maxHealth;
 	[SerializeField, Min(1)] private int damageFlashCount;
 	[SerializeField, Range(.1f, 1f)] private float invincibilityTime;
 
 	// Private fields.
 	private SpriteRenderer _renderer;
 	private ParticleSystem _deathEffect;
+	
 	private int _input;
+	private int _currentHealth;
 	private float _invincibilityTime;
 
 	private void Awake()
@@ -25,7 +27,8 @@ public class Player : MonoBehaviour
 
 	private void Start()
 	{
-		GameManager.Instance.UpdatePlayerHealth(health);
+		_currentHealth = maxHealth;
+		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
 	}
 
 	private void Update()
@@ -70,23 +73,34 @@ public class Player : MonoBehaviour
 		_renderer.transform.parent.gameObject.SetActive(false);
 	}
 
+	public void OnPlayerRespawn()
+	{
+		_currentHealth = maxHealth;
+		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
+
+		_renderer.transform.parent.gameObject.SetActive(true);
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (GameManager.Instance.gameOver)
+		if (GameManager.Instance.GameOver)
 			return;
 
 		if (collision.tag.Equals("ScoreTrigger"))
 			GameManager.Instance.UpdateScore();
+
 		else if (_invincibilityTime <= 0f)
 		{
-			health--;
+			_currentHealth--;
 			_invincibilityTime = invincibilityTime;
 
 			StopAllCoroutines();
 			StartCoroutine(DamageFlash());
 
-			GameManager.Instance.UpdatePlayerHealth(health);
+			CameraShaker.Instance.ShakeCamera();
+			GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
 			AudioManager.Instance.PlayWithRandomPitch("Collide 1", .5f, 1.5f);
+
 			DeviceVibration.Vibrate(100);
 		}
 	}
