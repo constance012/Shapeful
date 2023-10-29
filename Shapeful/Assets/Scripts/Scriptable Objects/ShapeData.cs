@@ -1,25 +1,43 @@
 using System;
 using UnityEngine;
+using UnityRandom = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "New Shape Data", menuName = "Shape Data")]
 public class ShapeData : ScriptableObject
 {
 	[Header("Vertices"), Space]
-	[Range(3, 8)] public int vertexCount;
+	[ReadOnly] public int vertexCount;
 	[ReadOnly] public Vector3[] _vertices;
 
-	[Header("Properties"), Space]
+	[Header("General Properties"), Space]
+	public Gradient colorGradient;
+
+	[Space]
 	public bool canSpin;
 	[Tooltip("The range of the spinning speed.")]
 	public Vector2 spinSpeed;
 
-	[Space]
-	[Min(1f)] public float shrinkSpeed;
-	public float initalScale;
+	[Space, Min(1f)] public float shrinkSpeed;
+	[Min(1f)] public float initialScale;
+
+	[Header("Player Affect Properties"), Space]
+	[Min(1)] public int scoreGain;
+	[Min(1)] public int contactDamage;
+
+	public Vector3 GetCollectiblePosition
+	{
+		get
+		{
+			int lastIndex = _vertices.Length - 1;
+			return (_vertices[0] + _vertices[lastIndex]) / 2f;
+		}
+	}
 
 	[ContextMenu("Initialize Vertex Positions")]
-	private void InitializeVertices()
+	public void InitializeVertices()
 	{
+		vertexCount = UnityRandom.Range(3, 7);
+
 		float angleBetweenAdjacentVertices = 360f / vertexCount;
 
 		_vertices = new Vector3[vertexCount];

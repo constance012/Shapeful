@@ -14,6 +14,39 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-2490853065381295009
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Volume Boosted Sounds
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 339dba5f373dd5f48b903b937d7eed7a
+  m_Children: []
+  m_Volume: d2fdfe8e0d062b244997da4d9bf5f4f2
+  m_Pitch: 1dda020e5a259f843a57c224e97f7621
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -1661098597449700370}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &-1661098597449700370
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: fe3e65d385c11534db8cd01aaecb61c8
+  m_EffectName: Attenuation
+  m_MixLevel: 06233fbc5b174fd4e90d9c49070ca5df
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!241 &24100000
 AudioMixerController:
   m_ObjectHideFlags: 0
@@ -39,6 +72,7 @@ AudioMixerController:
     - e825bf7d8601c25429bf86fe41f95d71
     - ae83f7944ad3459498f03c14d076ad27
     - c331def894039b6488a9cbea9ebf2307
+    - 339dba5f373dd5f48b903b937d7eed7a
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -88,6 +122,7 @@ AudioMixerSnapshotController:
   m_SnapshotID: 95e8d27da2339d746935456292d5ab74
   m_FloatValues:
     e15be5e4d00c3f341bf370c1b30a28f1: 0
+    d2fdfe8e0d062b244997da4d9bf5f4f2: 10
     5cb724ce170c4b1489ceac7b5a23ba04: 0
   m_TransitionOverrides: {}
 --- !u!243 &721750794242199442
@@ -99,7 +134,8 @@ AudioMixerGroupController:
   m_Name: Sounds
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: ae83f7944ad3459498f03c14d076ad27
-  m_Children: []
+  m_Children:
+  - {fileID: -2490853065381295009}
   m_Volume: e15be5e4d00c3f341bf370c1b30a28f1
   m_Pitch: deaf81d41a17715439f39d149cfe5e1b
   m_Send: 00000000000000000000000000000000

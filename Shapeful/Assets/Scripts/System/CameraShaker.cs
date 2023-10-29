@@ -36,6 +36,11 @@ public class CameraShaker : Singleton<CameraShaker>
 
 			_remainingTime -= Time.deltaTime;
 		}
+		else
+		{
+			_remainingTime = 0f;
+			_shaker.m_AmplitudeGain = 0f;
+		}
 	}
 
 	/// <summary>

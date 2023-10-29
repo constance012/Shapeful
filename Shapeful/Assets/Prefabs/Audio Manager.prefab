@@ -32,7 +32,7 @@ Transform:
   - {fileID: 7806397940119506723}
   - {fileID: 1809210697741528927}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &829548262812639011
 MonoBehaviour:
@@ -60,9 +60,18 @@ MonoBehaviour:
     audioType: 0
     clips:
     - {fileID: 8300000, guid: 662d6933b11aac24cbd6831b14989971, type: 3}
+    mixerGroup: {fileID: -2490853065381295009, guid: 01a55ee884801c442b405856da9af26d, type: 2}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Heart Pickup
+    audioType: 0
+    clips:
+    - {fileID: 8300000, guid: 8f12c3d7aab0e0644a5e20a7032f9374, type: 3}
     mixerGroup: {fileID: 721750794242199442, guid: 01a55ee884801c442b405856da9af26d, type: 2}
     volume: 1
-    pitch: 0
+    pitch: 1
     loop: 0
     source: {fileID: 0}
 --- !u!1 &1198365647037413693

@@ -1,8 +1,15 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+	private enum FlashType { Damage, Heal }
+
+	[Header("References"), Space]
+	[SerializeField] private GameObject damageTextPrefab;
+	[SerializeField] private GameObject graphics;
+
 	[Header("Move Speed"), Space]
 	[SerializeField] private float moveSpeed;
 
@@ -11,8 +18,12 @@ public class Player : MonoBehaviour
 	[SerializeField, Min(1)] private int damageFlashCount;
 	[SerializeField, Range(.1f, 1f)] private float invincibilityTime;
 
+	[Header("Flash Colors"), Space]
+	[SerializeField] private Color damageColor;
+	[SerializeField] private Color healColor;
+
 	// Private fields.
-	private SpriteRenderer _renderer;
+	private Material _mainMaterial;
 	private ParticleSystem _deathEffect;
 	
 	private int _input;
@@ -21,7 +32,7 @@ public class Player : MonoBehaviour
 
 	private void Awake()
 	{
-		_renderer = this.GetComponentInChildren<SpriteRenderer>("Graphics/Main");
+		_mainMaterial = this.GetComponentInChildren<SpriteRenderer>("Graphics/Main").material;
 		_deathEffect = this.GetComponentInChildren<ParticleSystem>("Death Effect");
 	}
 
@@ -35,6 +46,13 @@ public class Player : MonoBehaviour
 	{
 		if (_invincibilityTime > 0f)
 			_invincibilityTime -= Time.deltaTime;
+
+#if UNITY_EDITOR
+		if (Input.GetKey(KeyCode.A))
+			RotateLeft();
+		if (Input.GetKey(KeyCode.D))
+			RotateRight();
+#endif
 	}
 
 	private void FixedUpdate()
@@ -43,6 +61,22 @@ public class Player : MonoBehaviour
 		transform.RotateAround(Vector3.zero, Vector3.forward, angle);
 
 		_input = 0;
+	}
+
+	private void OnTriggerEnter2D(Collider2D collider)
+	{
+		if (GameManager.Instance.GameOver || collider.CompareTag("Untagged"))
+			return;
+
+		ShapeData shapeData = collider.transform.GetComponentInParent<ShapeMono>().shapeData;
+
+		if (collider.CompareTag("ScoreTrigger"))
+			GameManager.Instance.UpdateScore(shapeData.scoreGain);
+
+		else if (_invincibilityTime <= 0f)
+		{
+			TakeDamage(shapeData.contactDamage);
+		}
 	}
 
 	public void RotateLeft()
@@ -55,53 +89,89 @@ public class Player : MonoBehaviour
 		_input = -1;
 	}
 
-	private IEnumerator DamageFlash()
-	{
-		int totalFlashCount = damageFlashCount * 2;
-
-		for (int i = 1; i <= totalFlashCount; i++)
-		{
-			_renderer.color = i % 2 != 0 ? new Color(.82f, .174f, .174f) : Color.white;
-
-			yield return new WaitForSeconds(.05f);
-		}
-	}
-
+	/// <summary>
+	/// Callback method for the onGameOver event of the Game Manager.
+	/// </summary>
 	public void OnPlayerDeath()
 	{
 		_deathEffect.Play();
-		_renderer.transform.parent.gameObject.SetActive(false);
+		graphics.SetActive(false);
 	}
 
+	/// <summary>
+	/// Callback method for the onGameOver event of the Game Manager.
+	/// </summary>
 	public void OnPlayerRespawn()
 	{
 		_currentHealth = maxHealth;
 		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
 
-		_renderer.transform.parent.gameObject.SetActive(true);
+		graphics.SetActive(true);
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	public void TakeDamage(int amount)
 	{
-		if (GameManager.Instance.GameOver)
-			return;
+		_currentHealth -= amount;
+		_currentHealth = Mathf.Max(0, _currentHealth);
 
-		if (collision.tag.Equals("ScoreTrigger"))
-			GameManager.Instance.UpdateScore();
+		Vector3 damageTextPos = transform.position + Vector3.up;
+		DamageText.Generate(damageTextPrefab, damageTextPos, DamageTextStyle.Normal, amount.ToString());
 
-		else if (_invincibilityTime <= 0f)
+		StopAllCoroutines();
+		StartCoroutine(DamageFlash(FlashType.Damage));
+
+		CameraShaker.Instance.ShakeCamera();
+		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
+		AudioManager.Instance.PlayWithRandomPitch("Collide 1", .5f, 1.5f);
+
+		DeviceVibration.Vibrate(100);
+
+		_invincibilityTime = invincibilityTime;
+	}
+
+	public void Heal(int amount)
+	{
+		_currentHealth += amount;
+		_currentHealth = Mathf.Min(maxHealth, _currentHealth);
+
+		Vector3 damageTextPos = transform.position + Vector3.up;
+		DamageText.Generate(damageTextPrefab, damageTextPos, DamageText.DefaultHealingColor, DamageTextStyle.Normal, amount.ToString());
+
+		StopAllCoroutines();
+		StartCoroutine(DamageFlash(FlashType.Heal));
+
+		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
+	}
+
+	private IEnumerator DamageFlash(FlashType type)
+	{
+		if (type == FlashType.Damage)
 		{
-			_currentHealth--;
-			_invincibilityTime = invincibilityTime;
+			_mainMaterial.SetColor("_FlashColor", damageColor);
 
-			StopAllCoroutines();
-			StartCoroutine(DamageFlash());
+			int totalFlashCount = damageFlashCount * 2;
 
-			CameraShaker.Instance.ShakeCamera();
-			GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
-			AudioManager.Instance.PlayWithRandomPitch("Collide 1", .5f, 1.5f);
+			for (int i = 1; i <= totalFlashCount; i++)
+			{
+				_mainMaterial.SetFloat("_FlashIntensity", i % 2 != 0 ? 1f : 0f);
 
-			DeviceVibration.Vibrate(100);
+				yield return new WaitForSeconds(.05f);
+			}
+		}
+		else
+		{
+			float intensity = 1f;
+
+			_mainMaterial.SetColor("_FlashColor", healColor);
+
+			do
+			{
+				_mainMaterial.SetFloat("_FlashIntensity", intensity);
+				intensity -= Time.deltaTime;
+
+				yield return null;
+			}
+			while (intensity >= 0f);
 		}
 	}
 }

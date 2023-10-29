@@ -113,18 +113,18 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	}
 	#endregion
 
-	public void UpdateScore()
+	public void UpdateScore(int score)
 	{
-		_score++;
+		_score += score;
 		gameScoreText.text = _score.ToString();
 		_gameScoreAnimator.Play("Increment", 0, 0f);
 	}
 
 	public void UpdatePlayerHealth(int maxHealth, int currentHealth)
 	{
-		healthAnimator.speed = Mathf.InverseLerp(maxHealth, 1f, currentHealth);
+		healthAnimator.speed = Mathf.InverseLerp(maxHealth, 1, currentHealth);
 
-		if (currentHealth == 0)
+		if (currentHealth <= 0)
 		{
 			_continueAttempts.RemainingCD -= (DateTime.Now - _dataLastLoaded);
 
