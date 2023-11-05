@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	public UnityEvent onGameOver = new UnityEvent();
 	public UnityEvent onGameContinue = new UnityEvent();
 
+	public int ScoreMultiplier { get; set; } = 1;
 	public bool GameOver { get; private set; }
 	public static bool IsPause { get; private set; }
 
@@ -115,7 +116,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 
 	public void UpdateScore(int score)
 	{
-		_score += score;
+		_score += score * ScoreMultiplier;
 		gameScoreText.text = _score.ToString();
 		_gameScoreAnimator.Play("Increment", 0, 0f);
 	}

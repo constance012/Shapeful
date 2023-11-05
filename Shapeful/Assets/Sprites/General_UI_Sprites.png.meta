@@ -149,7 +149,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Heart_1
+      name: Heart_Colorable
       rect:
         serializedVersion: 2
         x: 17
@@ -170,7 +170,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cross
+      name: Cross_Colorable
       rect:
         serializedVersion: 2
         x: 34
@@ -191,11 +191,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heart_2
+      name: Heart_Icon
       rect:
         serializedVersion: 2
         x: 17
-        y: 119
+        y: 102
         width: 17
         height: 17
       alignment: 0
@@ -211,6 +211,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Power_Up_Colorable
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 136
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c6483f69c71c714786386884259e661
+      internalID: 210004665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Border_1
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 119
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 023dacab306662b4787efafc9dc46220
+      internalID: -1891338087
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: x2_Score_Icon
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 102
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f67dfe33a1baac04da33da3b7f01323c
+      internalID: 582136287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: x3_Score_Icon
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 102
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aabbc43c9bfe97f438a5db259f9e59bd
+      internalID: 1890552661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -222,9 +306,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Cross: -402178153
-      Heart_1: -982627233
-      Heart_2: -1779135085
+      Border_1: -1891338087
+      Cross_Colorable: -402178153
+      Heart_Colorable: -982627233
+      Heart_Icon: -1779135085
+      Power_Up_Colorable: 210004665
+      x2_Score_Icon: 582136287
+      x3_Score_Icon: 1890552661
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

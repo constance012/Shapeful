@@ -24,6 +24,7 @@ public class ShapeData : ScriptableObject
 	[Min(1)] public int scoreGain;
 	[Min(1)] public int contactDamage;
 
+	// Properties.
 	public Vector3 GetCollectiblePosition
 	{
 		get
@@ -32,6 +33,8 @@ public class ShapeData : ScriptableObject
 			return (_vertices[0] + _vertices[lastIndex]) / 2f;
 		}
 	}
+
+	public float GetBasedShrinkTime => (initialScale - .1f) / shrinkSpeed;
 
 	[ContextMenu("Initialize Vertex Positions")]
 	public void InitializeVertices()

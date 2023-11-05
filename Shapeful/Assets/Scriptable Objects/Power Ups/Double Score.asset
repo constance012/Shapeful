@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58d5102c7ddfeb41ab47a2a7616616d, type: 3}
+  m_Name: Double Score
+  m_EditorClassIdentifier: 
+  powerUpName: x2 Score
+  duration: 10
+  icon: {fileID: 582136287, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
+  description: All the shapes score double for a short amount of time.
+  multiplier: 2

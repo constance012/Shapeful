@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEditor;
 
 public enum DamageTextStyle { Normal, Critical }
 
@@ -21,6 +22,7 @@ public class DamageText : MonoBehaviour
 	public static readonly Color DefaultCriticalColor = new Color(.821f, .546f, .159f);
 	public static readonly Color DefaultDamageColor = Color.red;
 	public static readonly Color DefaultHealingColor = Color.green;
+	public static readonly Color DefaultPowerUpColor = new Color(.707f, .11f, .353f);
 
 	// Private fields.
 	private Color _currentTextColor;

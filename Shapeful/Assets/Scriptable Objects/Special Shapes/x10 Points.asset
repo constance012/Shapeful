@@ -46,7 +46,7 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   canSpin: 1
   spinSpeed: {x: 25, y: 60}
-  shrinkSpeed: 2
-  initialScale: 10
+  shrinkSpeed: 2.5
+  initialScale: 15
   scoreGain: 10
   contactDamage: 2

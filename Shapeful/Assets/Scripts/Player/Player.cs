@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	private enum FlashType { Damage, Heal }
+	private enum FlashType { Damage, Heal, PowerUp }
 
 	[Header("References"), Space]
 	[SerializeField] private GameObject damageTextPrefab;
@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
 	[Header("Flash Colors"), Space]
 	[SerializeField] private Color damageColor;
 	[SerializeField] private Color healColor;
+	[SerializeField] private Color powerUpColor;
 
 	// Private fields.
 	private Material _mainMaterial;
@@ -114,8 +115,7 @@ public class Player : MonoBehaviour
 		_currentHealth -= amount;
 		_currentHealth = Mathf.Max(0, _currentHealth);
 
-		Vector3 damageTextPos = transform.position + Vector3.up;
-		DamageText.Generate(damageTextPrefab, damageTextPos, DamageTextStyle.Normal, amount.ToString());
+		GenerateDamageText(amount, DamageText.DefaultDamageColor, DamageTextStyle.Normal);
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.Damage));
@@ -134,13 +134,26 @@ public class Player : MonoBehaviour
 		_currentHealth += amount;
 		_currentHealth = Mathf.Min(maxHealth, _currentHealth);
 
-		Vector3 damageTextPos = transform.position + Vector3.up;
-		DamageText.Generate(damageTextPrefab, damageTextPos, DamageText.DefaultHealingColor, DamageTextStyle.Normal, amount.ToString());
+		GenerateDamageText(amount, DamageText.DefaultHealingColor, DamageTextStyle.Normal);
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.Heal));
 
 		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
+	}
+
+	public void PowerUpReceived(string powerUpName)
+	{
+		GenerateDamageText(powerUpName, DamageText.DefaultPowerUpColor, DamageTextStyle.Normal);
+
+		StopAllCoroutines();
+		StartCoroutine(DamageFlash(FlashType.PowerUp));
+	}
+
+	public void GenerateDamageText(object displayObject, Color textColor, DamageTextStyle style)
+	{
+		Vector3 damageTextPos = transform.position + Vector3.up;
+		DamageText.Generate(damageTextPrefab, damageTextPos, textColor, style, displayObject.ToString());
 	}
 
 	private IEnumerator DamageFlash(FlashType type)
@@ -162,7 +175,8 @@ public class Player : MonoBehaviour
 		{
 			float intensity = 1f;
 
-			_mainMaterial.SetColor("_FlashColor", healColor);
+			Color color = type == FlashType.Heal ? healColor : powerUpColor;
+			_mainMaterial.SetColor("_FlashColor", color);
 
 			do
 			{

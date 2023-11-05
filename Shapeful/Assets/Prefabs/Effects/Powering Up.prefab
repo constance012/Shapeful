@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2420662525014420714}
   - component: {fileID: 9167230828905481939}
   m_Layer: 0
-  m_Name: Healing
+  m_Name: Powering Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,7 +169,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 3
+      scalar: 5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -222,8 +222,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.113991745, g: 0.3584906, b: 0.07271271, a: 1}
-      maxColor: {r: 0.38872638, g: 0.6320754, b: 0.15801886, a: 1}
+      minColor: {r: 0.7254902, g: 0.17647058, b: 0.34935054, a: 1}
+      maxColor: {r: 0.7735849, g: 0.3461756, b: 0.1715023, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -288,7 +288,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.4
-      minScalar: 0.15
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -664,7 +664,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 10
+    type: 12
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -980,7 +980,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 7
+        scalar: 5
         minScalar: 3
         maxCurve:
           serializedVersion: 2
@@ -1385,8 +1385,8 @@ ParticleSystem:
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
         ctime1: 65535
-        ctime2: 0
-        ctime3: 0
+        ctime2: 57440
+        ctime3: 65535
         ctime4: 0
         ctime5: 0
         ctime6: 0
@@ -1400,7 +1400,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_ColorSpace: -1
+        m_ColorSpace: 0
         m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
@@ -1554,7 +1554,7 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: -402178153, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
+    - sprite: {fileID: 210004665, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:

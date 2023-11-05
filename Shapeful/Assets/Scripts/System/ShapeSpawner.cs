@@ -14,7 +14,8 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 	[SerializeField, Range(0f, 1f)] private float collectibleSpawnChance;
 
 	[Header("Timer"), Space]
-	[SerializeField] private float spawnDelay = 1f;
+	[SerializeField, Range(.3f, 1f), Tooltip("How long should the latest shape have to shrink before spawning the next one.")]
+	private float spawnDelayScale = .5f;
 
 	[Header("Special Shape Spawning Condition"), Space]
 	[Tooltip("The chance to accumulate the spawning meter starts at 0when the player scores points." +
@@ -42,12 +43,14 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 		if (_delay <= 0f)
 		{
 			SpawnShape();
-			_delay = spawnDelay;
 		}
 	}
 
 	private void SpawnShape()
 	{
+		// Delays until the latest spawned shape has shrinked pass at least x% of its way, round the result to the nearest integer.
+		_delay = Mathf.Ceil(_nextShape.GetBasedShrinkTime * spawnDelayScale);
+		
 		_nextShape.InitializeVertices();
 
 		GameObject spawnedShape = Instantiate(shapePrefab, Vector3.zero, Quaternion.identity);
@@ -63,7 +66,15 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 		if (Random.value <= collectibleSpawnChance)
 		{
 			int randomIndex = Random.Range(0, collectibles.Length);
-			return collectibles[randomIndex];
+			Collectible picked = collectibles[randomIndex];
+
+			// If this is a power-up, check if the player has reached the power-up limit first.
+			if (picked.GetType() == typeof(PowerUpHolder) && PowerUpManager.Instance.IsLimitReached)
+			{
+				return null;
+			}
+
+			return picked;
 		}
 
 		return null;

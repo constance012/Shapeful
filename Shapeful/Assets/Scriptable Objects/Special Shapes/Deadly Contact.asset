@@ -47,6 +47,6 @@ MonoBehaviour:
   canSpin: 1
   spinSpeed: {x: 40, y: 80}
   shrinkSpeed: 3.5
-  initialScale: 10
+  initialScale: 15
   scoreGain: 3
   contactDamage: 3

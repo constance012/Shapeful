@@ -78,6 +78,7 @@ public class ShapeMono : MonoBehaviour
 		{
 			_collectible = Instantiate(collectible.gameObject, this.transform);
 			_collectible.transform.localPosition = shapeData.GetCollectiblePosition;
+			_collectible.transform.localScale = Vector3.one * .7f / this.transform.localScale.x;
 		}
 	}
 }
