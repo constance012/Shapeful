@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae8ca98abb18fa4493335861283a5e6, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  powerUpName: Shield
+  duration: 10
+  icon: {fileID: 1281274086, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
+  description: Blocks all shapes' contact damage for a short amount of time.
+  damageReductionScale: 1
+  breakable: 0

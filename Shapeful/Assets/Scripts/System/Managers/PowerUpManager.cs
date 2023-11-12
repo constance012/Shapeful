@@ -9,10 +9,16 @@ public class PowerUpManager : Singleton<PowerUpManager>
 	[SerializeField] private Transform powerUpsPanel;
 	[SerializeField] private GameObject uiIndicatorPrefab;
 
-	public bool IsLimitReached => powerUpsPanel.transform.childCount >= 1;
+	public bool IsLimitReached => powerUpsPanel.transform.childCount > 5;
+	public bool AnyActivePowerUps => powerUps.Count > 0;
 
 	private void Update()
 	{
+		if (!AnyActivePowerUps)
+		{
+			return;
+		}
+
 		// Remove any expired power ups first.
 		powerUps.RemoveAll(TryRemoveExpired);
 

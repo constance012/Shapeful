@@ -42,7 +42,10 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	public UnityEvent onGameOver = new UnityEvent();
 	public UnityEvent onGameContinue = new UnityEvent();
 
+	// Properties.
 	public int ScoreMultiplier { get; set; } = 1;
+	public float DamageReduction { get; set; } = 0f;
+
 	public bool GameOver { get; private set; }
 	public static bool IsPause { get; private set; }
 

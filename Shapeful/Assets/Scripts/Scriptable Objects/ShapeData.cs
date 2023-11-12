@@ -25,7 +25,7 @@ public class ShapeData : ScriptableObject
 	[Min(1)] public int contactDamage;
 
 	// Properties.
-	public Vector3 GetCollectiblePosition
+	public Vector3 GetCollectablePosition
 	{
 		get
 		{

@@ -26,6 +26,7 @@ public class Player : MonoBehaviour
 	// Private fields.
 	private Material _mainMaterial;
 	private ParticleSystem _deathEffect;
+	private ParticleSystem _powerUpEffect;
 	
 	private int _input;
 	private int _currentHealth;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
 	{
 		_mainMaterial = this.GetComponentInChildren<SpriteRenderer>("Graphics/Main").material;
 		_deathEffect = this.GetComponentInChildren<ParticleSystem>("Death Effect");
+		_powerUpEffect = this.GetComponentInChildren<ParticleSystem>("Power-up In Effect");
 	}
 
 	private void Start()
@@ -47,6 +49,12 @@ public class Player : MonoBehaviour
 	{
 		if (_invincibilityTime > 0f)
 			_invincibilityTime -= Time.deltaTime;
+
+		if (_powerUpEffect.isPlaying)
+		{
+			_powerUpEffect.transform.rotation = Quaternion.identity;
+			OnAnyPowerUpsExpired();
+		}
 
 #if UNITY_EDITOR
 		if (Input.GetKey(KeyCode.A))
@@ -112,10 +120,15 @@ public class Player : MonoBehaviour
 
 	public void TakeDamage(int amount)
 	{
+		amount *= Mathf.RoundToInt(1f - GameManager.Instance.DamageReduction);
+
 		_currentHealth -= amount;
 		_currentHealth = Mathf.Max(0, _currentHealth);
 
-		GenerateDamageText(amount, DamageText.DefaultDamageColor, DamageTextStyle.Normal);
+		if (amount > 0)
+			GenerateDamageText(amount, DamageText.DefaultDamageColor, DamageTextStyle.Normal);
+		else
+			GenerateDamageText("Blocked", new Color(.8f, .8f, .8f), DamageTextStyle.Critical);
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.Damage));
@@ -144,10 +157,19 @@ public class Player : MonoBehaviour
 
 	public void PowerUpReceived(string powerUpName)
 	{
+		if (_powerUpEffect.isStopped)
+			_powerUpEffect.Play();
+
 		GenerateDamageText(powerUpName, DamageText.DefaultPowerUpColor, DamageTextStyle.Normal);
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.PowerUp));
+	}
+
+	public void OnAnyPowerUpsExpired()
+	{
+		if (!PowerUpManager.Instance.AnyActivePowerUps)
+			_powerUpEffect.Stop();
 	}
 
 	public void GenerateDamageText(object displayObject, Color textColor, DamageTextStyle style)

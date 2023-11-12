@@ -9,9 +9,9 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 	[SerializeField] private ShapeData normalShape;
 	[SerializeField] private ShapeData[] specialShapes;
 
-	[Header("Collectibles"), Space]
-	[SerializeField] private Collectible[] collectibles;
-	[SerializeField, Range(0f, 1f)] private float collectibleSpawnChance;
+	[Header("Collectables"), Space]
+	[SerializeField] private Collectable[] collectables;
+	[SerializeField, Range(0f, 1f)] private float collectableSpawnChance;
 
 	[Header("Timer"), Space]
 	[SerializeField, Range(.3f, 1f), Tooltip("How long should the latest shape have to shrink before spawning the next one.")]
@@ -55,18 +55,18 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 
 		GameObject spawnedShape = Instantiate(shapePrefab, Vector3.zero, Quaternion.identity);
 
-		Collectible collectible = CheckCollectibleSpawn();
-		spawnedShape.GetComponentInChildren<ShapeMono>().InitializeComponents(_nextShape, collectible);
+		Collectable collectable = CheckCollectableSpawn();
+		spawnedShape.GetComponentInChildren<ShapeMono>().InitializeComponents(_nextShape, collectable);
 
 		AccumulateSpawningMeter();
 	}
 
-	private Collectible CheckCollectibleSpawn()
+	private Collectable CheckCollectableSpawn()
 	{
-		if (Random.value <= collectibleSpawnChance)
+		if (Random.value <= collectableSpawnChance)
 		{
-			int randomIndex = Random.Range(0, collectibles.Length);
-			Collectible picked = collectibles[randomIndex];
+			int randomIndex = Random.Range(0, collectables.Length);
+			Collectable picked = collectables[randomIndex];
 
 			// If this is a power-up, check if the player has reached the power-up limit first.
 			if (picked.GetType() == typeof(PowerUpHolder) && PowerUpManager.Instance.IsLimitReached)

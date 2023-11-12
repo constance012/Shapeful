@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PowerUpHolder : Collectible
+public class PowerUpHolder : Collectable
 {
 	[Header("Attached Power Up"), Space]
 	[SerializeField] private PowerUp powerUp;

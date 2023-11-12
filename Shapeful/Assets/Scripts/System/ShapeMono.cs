@@ -14,7 +14,7 @@ public class ShapeMono : MonoBehaviour
 	[SerializeField] private EdgeCollider2D _scoreTrigger;
 
 	// Private fields.
-	private GameObject _collectible;
+	private GameObject _collectable;
 	private float _spinSpeed;
 
 	private void Start()
@@ -30,10 +30,10 @@ public class ShapeMono : MonoBehaviour
 	{
 		transform.localScale -= Vector3.one * shapeData.shrinkSpeed * Time.deltaTime;
 
-		if (_collectible != null)
+		if (_collectable != null)
 		{
-			_collectible.transform.localScale = Vector3.one * .7f / this.transform.localScale.x;
-			_collectible.transform.rotation = Quaternion.identity;
+			_collectable.transform.localScale = Vector3.one * .7f / this.transform.localScale.x;
+			_collectable.transform.rotation = Quaternion.identity;
 		}
 
 		if (transform.localScale.x < .1f)
@@ -48,7 +48,7 @@ public class ShapeMono : MonoBehaviour
 		}
 	}
 
-	public void InitializeComponents(ShapeData data, Collectible collectible = null)
+	public void InitializeComponents(ShapeData data, Collectable collectable = null)
 	{
 		this.shapeData = data;
 
@@ -74,11 +74,11 @@ public class ShapeMono : MonoBehaviour
 
 		_scoreTrigger.points = scorePoints;
 
-		if (collectible != null)
+		if (collectable != null)
 		{
-			_collectible = Instantiate(collectible.gameObject, this.transform);
-			_collectible.transform.localPosition = shapeData.GetCollectiblePosition;
-			_collectible.transform.localScale = Vector3.one * .7f / this.transform.localScale.x;
+			_collectable = Instantiate(collectable.gameObject, this.transform);
+			_collectable.transform.localPosition = shapeData.GetCollectablePosition;
+			_collectable.transform.localScale = Vector3.one * .7f / this.transform.localScale.x;
 		}
 	}
 }

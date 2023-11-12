@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class HealingHeart : Collectible
+public class HealingHeart : Collectable
 {
 	[Header("Properties"), Space]
 	[SerializeField] private int healAmount;

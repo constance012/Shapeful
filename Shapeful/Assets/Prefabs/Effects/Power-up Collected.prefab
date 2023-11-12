@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2420662525014420714}
   - component: {fileID: 9167230828905481939}
   m_Layer: 0
-  m_Name: Powering Up
+  m_Name: Power-up Collected
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,8 +287,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.4
-      minScalar: 0.2
+      scalar: 0.35
+      minScalar: 0.15
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -664,7 +664,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 12
+    type: 10
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -980,7 +980,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 3
-        scalar: 5
+        scalar: 6
         minScalar: 3
         maxCurve:
           serializedVersion: 2
@@ -1494,8 +1494,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startFrame:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: 0.9999
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1550,11 +1550,12 @@ ParticleSystem:
     tilesY: 1
     animationType: 0
     rowIndex: 0
-    cycles: 1
+    cycles: 0.0001
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 210004665, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
+    - sprite: {fileID: -1347116309, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
+    - sprite: {fileID: 881439035, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
