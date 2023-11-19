@@ -10,7 +10,7 @@ public class CooldownBasedData
 	/// <summary>
 	/// The base cooldown for a single value (READ-ONLY).
 	/// </summary>
-	public TimeSpan baseCooldown;
+	public readonly TimeSpan baseCooldown;
 
 	/// <summary>
 	/// The total cooldown for all continue attemps (READ-ONLY).
@@ -61,7 +61,7 @@ public class CooldownBasedData
 		_remainingCD += baseCooldown;
 	}
 
-	public Vector3Int RemainingCDToVector3Int()
+	public Vector3Int FromRemainingCD()
 	{
 		int totalHours = Mathf.FloorToInt((float)_remainingCD.TotalHours);
 		return new Vector3Int(totalHours, _remainingCD.Minutes, _remainingCD.Seconds);

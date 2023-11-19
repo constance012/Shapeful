@@ -7042,7 +7042,7 @@ GameObject:
   - component: {fileID: 607001452}
   - component: {fileID: 607001451}
   m_Layer: 0
-  m_Name: Ads Initializer
+  m_Name: Interstitial Ads Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7063,6 +7063,7 @@ MonoBehaviour:
   androidGameID: 5428235
   iOSGameID: 5428234
   testMode: 1
+  minimumTimeInterval: 30
 --- !u!4 &607001452
 Transform:
   m_ObjectHideFlags: 0
@@ -9336,7 +9337,6 @@ MonoBehaviour:
   powerUps: []
   powerUpsPanel: {fileID: 2052093595}
   uiIndicatorPrefab: {fileID: 3504303140971397901, guid: 52822a26251fa59418fefd1b11a3d052, type: 3}
-  player: {fileID: 1335748692}
 --- !u!4 &1430985882
 Transform:
   m_ObjectHideFlags: 0

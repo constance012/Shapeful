@@ -64,6 +64,17 @@ public class PowerUpManager : Singleton<PowerUpManager>
 		return powerUps.Find(powerUp => powerUp.CompareName(targetName));
 	}
 
+	public void ForceRemoveAll()
+	{
+		Debug.Log("Game over, removing all power-ups.");
+
+		powerUps.RemoveAll((powerUp) =>
+		{
+			powerUp.RemoveEffect();
+			return true;
+		});
+	}
+
 	private bool TryRemoveExpired(PowerUp powerUp)
 	{
 		if (powerUp.DurationExpired)

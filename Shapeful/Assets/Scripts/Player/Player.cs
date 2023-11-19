@@ -84,7 +84,8 @@ public class Player : MonoBehaviour
 
 		else if (_invincibilityTime <= 0f)
 		{
-			TakeDamage(shapeData.contactDamage);
+			if (!TakeDamage(shapeData.contactDamage))
+				GameManager.Instance.UpdateScore(shapeData.scoreGain);
 		}
 	}
 
@@ -118,7 +119,7 @@ public class Player : MonoBehaviour
 		graphics.SetActive(true);
 	}
 
-	public void TakeDamage(int amount)
+	public bool TakeDamage(int amount)
 	{
 		amount *= Mathf.RoundToInt(1f - GameManager.Instance.DamageReduction);
 
@@ -140,6 +141,8 @@ public class Player : MonoBehaviour
 		DeviceVibration.Vibrate(100);
 
 		_invincibilityTime = invincibilityTime;
+
+		return amount > 0;
 	}
 
 	public void Heal(int amount)

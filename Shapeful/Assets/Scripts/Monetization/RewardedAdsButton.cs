@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Advertisements;
-using Unity.VisualScripting;
 using TMPro;
 using System;
 
@@ -31,9 +30,9 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
 		LoadAd();
 	}
 
-	public void LoadAd()
+	private void LoadAd()
 	{
-		Debug.Log($"Loading ad for {_adUnitID}");
+		Debug.Log($"Loading a rewarded ad for {_adUnitID}");
 
 		if (Advertisement.isInitialized)
 		{
@@ -42,7 +41,7 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
 		}
 	}
 
-	public void ShowAd()
+	private void ShowAd()
 	{
 		targetButton.interactable = false;
 		Advertisement.Show(_adUnitID, this);
@@ -69,7 +68,7 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
 		}
 	}
 
-	#region Ad Load Interface Methods.
+	#region Ads Load Interface Methods.
 	public void OnUnityAdsAdLoaded(string adUnitID)
 	{
 		Debug.Log($"Ad loaded for {adUnitID}");
@@ -87,7 +86,7 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
 	}
 	#endregion
 
-	#region Ad Show Interface Methods.
+	#region Ads Show Interface Methods.
 	public void OnUnityAdsShowStart(string adUnitID) { }
 	public void OnUnityAdsShowClick(string adUnitID) { }
 

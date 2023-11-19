@@ -43,6 +43,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	public UnityEvent onGameContinue = new UnityEvent();
 
 	// Properties.
+	public int CurrentScore => _score;
 	public int ScoreMultiplier { get; set; } = 1;
 	public float DamageReduction { get; set; } = 0f;
 
@@ -70,6 +71,8 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 
 		_gameScoreAnimator = gameScoreText.GetComponentInParent<Animator>();
 		_continueAttempts = new CooldownBasedData(GameData.MAX_CONTINUE_ATTEMPT, continueAttemptCooldown);
+
+		Debug.Log("Game manager awoken.");
 	}
 
 	private void Start()
@@ -113,7 +116,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	{
 		data.highscore = _highscore;
 		data.continueAttempts = _continueAttempts.value;
-		data.ContinueAttemptRemainingCD = _continueAttempts.RemainingCDToVector3Int();
+		data.ContinueAttemptRemainingCD = _continueAttempts.FromRemainingCD();
 	}
 	#endregion
 
@@ -224,10 +227,14 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 		}
 
 		continueAttemptText.text = $"REMAINING ATTEMPTS: <color=#AE2929> {_continueAttempts.value} </color>";
+		
 		GameDataManager.Instance.SaveGame();
+		PowerUpManager.Instance.ForceRemoveAll();
 
 		playerUI.SetActive(false);
 		gameOverPanel.SetActive(true);
+
+		InterstitialAdsManager.Instance.TryShowAd();
 	}
 
 	private IEnumerator UnpauseCountDown()

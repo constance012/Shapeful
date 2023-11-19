@@ -29,7 +29,7 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 	private ShapeData _nextShape;
 	private float _delay;
 	private int _specialSpawningMeter = 0;
-	private bool _specialShapeNext;
+	private bool _specialShapePrevious;
 
 	private void Start()
 	{
@@ -54,6 +54,13 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 		_nextShape.InitializeVertices();
 
 		GameObject spawnedShape = Instantiate(shapePrefab, Vector3.zero, Quaternion.identity);
+
+		// Only spawn collectables or special shapes if the player scores at least 5.
+		if (GameManager.Instance.CurrentScore < 5)
+		{
+			spawnedShape.GetComponentInChildren<ShapeMono>().InitializeComponents(_nextShape, null);
+			return;
+		}
 
 		Collectable collectable = CheckCollectableSpawn();
 		spawnedShape.GetComponentInChildren<ShapeMono>().InitializeComponents(_nextShape, collectable);
@@ -82,10 +89,10 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 
 	private void AccumulateSpawningMeter()
 	{
-		if (_specialShapeNext)
+		if (_specialShapePrevious)
 		{
 			_nextShape = Instantiate(normalShape);
-			_specialShapeNext = false;
+			_specialShapePrevious = false;
 			return;
 		}
 
@@ -101,7 +108,7 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 				_nextShape = Instantiate(specialShape);
 				
 				_specialSpawningMeter = 0;
-				_specialShapeNext = true;
+				_specialShapePrevious = true;
 			}
 		}
 	}

@@ -15,6 +15,7 @@ MonoBehaviour:
   powerUpName: Shield
   duration: 10
   icon: {fileID: 1281274086, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
-  description: Blocks all shapes' contact damage for a short amount of time.
+  description: Blocks all shapes' contact damage for a short amount of time. Scores
+    will be counted if the damage is completely negated.
   damageReductionScale: 1
   breakable: 0
