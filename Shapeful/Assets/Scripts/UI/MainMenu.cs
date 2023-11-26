@@ -1,5 +1,6 @@
 ﻿using CSTGames.DataPersistence;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -8,6 +9,7 @@ public class MainMenu : MonoBehaviour
 	[Header("References"), Space]
 	[SerializeField] private AudioMixer mixer;
 	[SerializeField] private Animator animator;
+	[SerializeField] private TextMeshProUGUI versionText;
 
 	private static bool _hasStartup;
 
@@ -17,14 +19,16 @@ public class MainMenu : MonoBehaviour
 		_hasStartup = false;
 		#endif
 
+		versionText.text = Application.version;
+		
 		if (!_hasStartup)
 		{
 			InternalInitialization();
 			animator.Play("Prepare For Startup");
 
 			yield return new WaitForSecondsRealtime(.5f);
-
 			animator.Play("Initial Startup");
+
 			_hasStartup = true;
 		}
 	}

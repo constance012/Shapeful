@@ -127,16 +127,21 @@ public class Player : MonoBehaviour
 		_currentHealth = Mathf.Max(0, _currentHealth);
 
 		if (amount > 0)
+		{
 			GenerateDamageText(amount, DamageText.DefaultDamageColor, DamageTextStyle.Normal);
+			AudioManager.Instance.PlayWithRandomPitch("Collide 1", .5f, 1.5f);
+		}
 		else
+		{
 			GenerateDamageText("Blocked", new Color(.8f, .8f, .8f), DamageTextStyle.Critical);
+			AudioManager.Instance.PlayWithRandomPitch("Damage Blocked", .8f, 1.3f);
+		}
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.Damage));
 
 		CameraShaker.Instance.ShakeCamera();
 		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
-		AudioManager.Instance.PlayWithRandomPitch("Collide 1", .5f, 1.5f);
 
 		DeviceVibration.Vibrate(100);
 
