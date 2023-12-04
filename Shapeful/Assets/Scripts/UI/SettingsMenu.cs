@@ -12,6 +12,7 @@ public class SettingsMenu : MonoBehaviour
 	[SerializeField] private Slider _musicSlider;
 	[SerializeField] private Slider _soundsSlider;
 	[SerializeField] private TMP_Dropdown _qualityDropdown;
+	[SerializeField] private Toggle _particlesToggle;
 
 	// Private fields
 	private TextMeshProUGUI _musicText;
@@ -28,7 +29,7 @@ public class SettingsMenu : MonoBehaviour
 		ReloadUI();
 	}
 
-	#region Callback Method for UI.
+	#region Callback Method for UI Events.
 	public void SetMusicVolume(float amount)
 	{
 		mixer.SetFloat("musicVol", amount);
@@ -49,6 +50,12 @@ public class SettingsMenu : MonoBehaviour
 	{
 		QualitySettings.SetQualityLevel(index);
 		UserSettings.QualityLevel = index;
+	}
+
+	public void ToggleBackgroundParticles(bool state)
+	{
+		LevelManager.Instance.EnableParticleEffect(state);
+		UserSettings.EnableBackgroundParticles = state;
 	}
 
 	public void ResetToDefault()
@@ -72,5 +79,7 @@ public class SettingsMenu : MonoBehaviour
 		_musicSlider.value = musicVol;
 		_soundsSlider.value = soundsVol;
 		_qualityDropdown.value = UserSettings.QualityLevel;
+
+		_particlesToggle.isOn = UserSettings.EnableBackgroundParticles;
 	}
 }

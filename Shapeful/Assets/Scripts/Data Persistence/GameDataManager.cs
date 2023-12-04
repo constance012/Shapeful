@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.IO;
 
 namespace CSTGames.DataPersistence
 {
@@ -14,7 +15,7 @@ namespace CSTGames.DataPersistence
 		[Header("Save File Configurations")]
 		[SerializeField] private string subFolder;
 		[SerializeField] private string fileName;
-		[SerializeField] private bool useEncryption;
+		[ReadOnly] public bool useEncryption;
 
 		// Private fields.
 		private List<ISaveDataTransceiver> _transceivers;
@@ -42,17 +43,18 @@ namespace CSTGames.DataPersistence
 			SceneManager.sceneLoaded -= OnSceneLoaded;
 		}
 
-		#if UNITY_EDITOR
 		private void Start()
 		{
+			this._transceivers = GetAllTransceivers();
+			
+		#if UNITY_EDITOR
 			if (SceneManager.GetSceneByName("Scenes/Game").isLoaded)
 			{
 				Debug.Log("Loads game data in editor.");
-				this._transceivers = GetAllTransceivers();
 				LoadGame();
 			}
-		}
 		#endif
+		}
 		#endregion
 
 		#region Game Data Management.
@@ -104,8 +106,75 @@ namespace CSTGames.DataPersistence
 
 		public void DistributeDataToTransceivers()
 		{
-			foreach (ISaveDataTransceiver transceiver in _transceivers)
-				transceiver.LoadData(_currentData);
+			if (_currentData != null)
+			{
+				foreach (ISaveDataTransceiver transceiver in _transceivers)
+					transceiver.LoadData(_currentData);
+			}
+		}
+
+		private List<ISaveDataTransceiver> GetAllTransceivers()
+		{
+			IEnumerable<ISaveDataTransceiver> _dataTransceivers = FindObjectsOfType<MonoBehaviour>(true).
+																	OfType<ISaveDataTransceiver>();
+
+			return new List<ISaveDataTransceiver>(_dataTransceivers);
+		}
+		#endregion
+
+		#region Data Encryption/Decryption.
+		public void EncryptManually()
+		{
+			if (useEncryption)
+				return;
+
+			SaveFileHandler<GameData> handler = new SaveFileHandler<GameData>(Application.persistentDataPath, subFolder, fileName, false);
+
+			string fullPath = Path.Combine(Application.persistentDataPath, subFolder, fileName);
+
+			if (!File.Exists(fullPath))
+			{
+				Debug.LogError($"No player data was found at: {fullPath}.\n Thus can not perform the ENCRYPTION process.");
+				return;
+			}
+
+			// Load the readable data.
+			GameData data = handler.LoadDataFromFile();
+
+			// Turn on encryption and save the data again.
+			handler.UseEncryption = true;
+			handler.SaveDataToFile(data);
+
+			Debug.LogWarning("ENCRYPTION process complete!");
+
+			useEncryption = true;
+		}
+
+		public void DecryptManually()
+		{
+			if (!useEncryption)
+				return;
+
+			SaveFileHandler<GameData> handler = new SaveFileHandler<GameData>(Application.persistentDataPath, subFolder, fileName, true);
+
+			string fullPath = Path.Combine(Application.persistentDataPath, subFolder, fileName);
+
+			if (!File.Exists(fullPath))
+			{
+				Debug.LogError($"No player data was found at: {fullPath}.\n Thus can not perform the DECRYPTION process.");
+				return;
+			}
+
+			// Load the encrypted data.
+			GameData data = handler.LoadDataFromFile();
+
+			// Turn off encryption and save the data again.
+			handler.UseEncryption = false;
+			handler.SaveDataToFile(data);
+
+			Debug.LogWarning("DECRYPTION process complete!");
+
+			useEncryption = false;
 		}
 		#endregion
 
@@ -117,16 +186,7 @@ namespace CSTGames.DataPersistence
 			Debug.Log($"Loaded scene: {scene.name}", this);
 			this._transceivers = GetAllTransceivers();
 
-			if (_currentData != null)
-				DistributeDataToTransceivers();
-		}
-
-		private List<ISaveDataTransceiver> GetAllTransceivers()
-		{
-			IEnumerable<ISaveDataTransceiver> _dataTransceivers = FindObjectsOfType<MonoBehaviour>(true).
-																	OfType<ISaveDataTransceiver>();
-
-			return new List<ISaveDataTransceiver>(_dataTransceivers);
+			DistributeDataToTransceivers();
 		}
 	}
 }

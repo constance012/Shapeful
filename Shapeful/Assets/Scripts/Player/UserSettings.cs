@@ -59,6 +59,12 @@ public static class UserSettings
 		get { return PlayerPrefs.GetInt("UseVsync", 0) == 1; }
 		set { PlayerPrefs.SetInt("UseVsync", value ? 1 : 0); }
 	}
+
+	public static bool EnableBackgroundParticles
+	{
+		get { return PlayerPrefs.GetInt("EnableBackgroundParticles", 1) == 1; }
+		set { PlayerPrefs.SetInt("EnableBackgroundParticles", value ? 1 : 0); }
+	}
 	#endregion
 
 	#region Controls Settings
@@ -89,6 +95,7 @@ public static class UserSettings
 				IsFullscreen = false;
 				TargetFramerate = 120f;
 				UseVsync = false;
+				EnableBackgroundParticles = true;
 				break;
 
 			case SettingSection.Controls:
@@ -105,6 +112,7 @@ public static class UserSettings
 				IsFullscreen = false;
 				TargetFramerate = 120f;
 				UseVsync = false;
+				EnableBackgroundParticles = true;
 
 				SelectedKeyset = "Default";
 				break;

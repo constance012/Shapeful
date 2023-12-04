@@ -31,8 +31,11 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _FlashIntensity: 1
+    - _FlashIntensity: 0
+    - _ISFLASHING: 0
+    - _IS_FLASHING: 0
     m_Colors:
+    - _BaseColor: {r: 0, g: 0, b: 0, a: 0}
     - _FlashColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2180954297893521751

@@ -7,21 +7,21 @@ namespace CSTGames.DataPersistence
 {
 	public class SaveFileHandler<TData>
 	{
-		public string directory { get; set; } = "";
-		public string subFolders { get; set; } = "";
-		public string fileName { get; set; } = "";
+		public string Directory { get; set; } = "";
+		public string SubFolders { get; set; } = "";
+		public string FileName { get; set; } = "";
 
-		public bool useEncryption { get; set; }
+		public bool UseEncryption { get; set; }
 
-		private const string ENCRYPTION_CODE = "hypoxia";
+		private const string ENCRYPTION_CODE = "Sacrosanct";
 
 		public SaveFileHandler(string directory, string subFolders, string fileName, bool useEncryption)
 		{
-			this.directory = directory;
-			this.subFolders = subFolders;
-			this.fileName = fileName;
+			this.Directory = directory;
+			this.SubFolders = subFolders;
+			this.FileName = fileName;
 
-			this.useEncryption = useEncryption;
+			this.UseEncryption = useEncryption;
 		}
 
 		/// <summary>
@@ -34,7 +34,7 @@ namespace CSTGames.DataPersistence
 			if (saveSlotID == null)
 				return default;
 
-			string fullPath = Path.Combine(directory, saveSlotID, subFolders, fileName);
+			string fullPath = Path.Combine(Directory, saveSlotID, SubFolders, FileName);
 
 			TData loadedData = default;
 
@@ -54,7 +54,7 @@ namespace CSTGames.DataPersistence
 					}
 
 					// Decrypt the data (Optional).
-					if (useEncryption)
+					if (UseEncryption)
 						serializedData = EncryptOrDecrypt(serializedData);
 
 					// Deserialize that data from a json formatted string back into object's data.
@@ -77,7 +77,7 @@ namespace CSTGames.DataPersistence
 		/// <returns>The loaded Data</returns>
 		public TData LoadDataFromFile()
 		{
-			string fullPath = Path.Combine(directory, subFolders, fileName);
+			string fullPath = Path.Combine(Directory, SubFolders, FileName);
 			TData loadedData = default;
 
 			if (File.Exists(fullPath))
@@ -96,7 +96,7 @@ namespace CSTGames.DataPersistence
 					}
 
 					// Decrypt the data (Optional).
-					if (useEncryption)
+					if (UseEncryption)
 						serializedData = EncryptOrDecrypt(serializedData);
 
 					// Deserialize data.
@@ -123,18 +123,18 @@ namespace CSTGames.DataPersistence
 			if (saveSlotID == null)
 				return;
 
-			string fullPath = Path.Combine(directory, saveSlotID, subFolders, fileName);
+			string fullPath = Path.Combine(Directory, saveSlotID, SubFolders, FileName);
 			string parentDirectory = Path.GetDirectoryName(fullPath);
 			try
 			{
-				if (!Directory.Exists(parentDirectory))
-					Directory.CreateDirectory(parentDirectory);
+				if (!System.IO.Directory.Exists(parentDirectory))
+					System.IO.Directory.CreateDirectory(parentDirectory);
 
 				// Serialize the object's data into a json formatted string.
 				string serializedData = JsonConvert.SerializeObject(dataToSave, Formatting.Indented);
 
 				// Encrypt the data (Optional).
-				if (useEncryption)
+				if (UseEncryption)
 					serializedData = EncryptOrDecrypt(serializedData);
 
 				// Write the serialized data to file.
@@ -160,19 +160,19 @@ namespace CSTGames.DataPersistence
 		/// <param name="dataToSave"> The data object to save. </param>
 		public void SaveDataToFile(TData dataToSave)
 		{
-			string fullPath = Path.Combine(directory, subFolders, fileName);
+			string fullPath = Path.Combine(Directory, SubFolders, FileName);
 			string parentDirectory = Path.GetDirectoryName(fullPath);
 
 			try
 			{
-				if (!Directory.Exists(parentDirectory))
-					Directory.CreateDirectory(parentDirectory);
+				if (!System.IO.Directory.Exists(parentDirectory))
+					System.IO.Directory.CreateDirectory(parentDirectory);
 
 				// Serialize data.
 				string serializedData = JsonConvert.SerializeObject(dataToSave, Formatting.Indented);
 
 				// Encrypt the data (Optional).
-				if (useEncryption)
+				if (UseEncryption)
 					serializedData = EncryptOrDecrypt(serializedData);
 
 				// Write the serialized data to file.

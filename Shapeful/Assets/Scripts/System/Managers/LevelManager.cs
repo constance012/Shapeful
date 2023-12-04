@@ -1,5 +1,4 @@
-﻿using CSTGames.DataPersistence;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,11 +7,22 @@ public class LevelManager : PersistentSingleton<LevelManager>
 	[Header("Reference"), Space]
 	[SerializeField] private Animator transitionPanel;
 
+	// Private fields.
+	private GameObject _backgroundParticles;
+
+	protected override void Awake()
+	{
+		base.Awake();
+		_backgroundParticles = transform.Find("Background Particles").gameObject;
+	}
+
 	private void Start()
 	{
 		transitionPanel.Play("Menu First Loaded");
 	}
 
+	public void EnableParticleEffect(bool state) => _backgroundParticles.SetActive(state);
+	
 	public void LoadScene(string sceneName)
 	{
 		StartCoroutine(LoadSceneCoroutine(sceneName));

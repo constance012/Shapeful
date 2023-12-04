@@ -1,8 +1,9 @@
+using CSTGames.DataPersistence;
 using System.Collections;
-using UnityEditor;
+using UnityEngine.Rendering;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISaveDataTransceiver
 {
 	private enum FlashType { Damage, Heal, PowerUp }
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour
 	[SerializeField] private Color powerUpColor;
 
 	// Private fields.
+	private LocalKeyword _isFlashing;
 	private Material _mainMaterial;
 	private ParticleSystem _deathEffect;
 	private ParticleSystem _powerUpEffect;
@@ -37,6 +39,8 @@ public class Player : MonoBehaviour
 		_mainMaterial = this.GetComponentInChildren<SpriteRenderer>("Graphics/Main").material;
 		_deathEffect = this.GetComponentInChildren<ParticleSystem>("Death Effect");
 		_powerUpEffect = this.GetComponentInChildren<ParticleSystem>("Power-up In Effect");
+
+		_isFlashing = new LocalKeyword(_mainMaterial.shader, "_IS_FLASHING_ON");
 	}
 
 	private void Start()
@@ -88,6 +92,17 @@ public class Player : MonoBehaviour
 				GameManager.Instance.UpdateScore(shapeData.scoreGain);
 		}
 	}
+
+	#region Interface Methods.
+	public void SaveData(GameData data) { }
+
+	public void LoadData(GameData data)
+	{
+		Color currentColor = data.playerColor;
+
+		_mainMaterial.SetColor("_BaseColor", currentColor);
+	}
+	#endregion
 
 	public void RotateLeft()
 	{
@@ -188,6 +203,8 @@ public class Player : MonoBehaviour
 
 	private IEnumerator DamageFlash(FlashType type)
 	{
+		_mainMaterial.EnableKeyword(_isFlashing);
+
 		if (type == FlashType.Damage)
 		{
 			_mainMaterial.SetColor("_FlashColor", damageColor);
@@ -217,5 +234,7 @@ public class Player : MonoBehaviour
 			}
 			while (intensity >= 0f);
 		}
+
+		_mainMaterial.DisableKeyword(_isFlashing);
 	}
 }

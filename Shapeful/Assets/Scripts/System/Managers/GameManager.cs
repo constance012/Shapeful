@@ -5,6 +5,7 @@ using CSTGames.DataPersistence;
 using UnityEngine.Events;
 using System.Collections;
 using System;
+using System.Data;
 
 public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 {
@@ -51,6 +52,8 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	public static bool IsPause { get; private set; }
 
 	// Private fields.
+	private const uint MAX_CONTINUE_ATTEMPT = 3;
+
 	private Animator _gameScoreAnimator;
 	private DateTime _dataLastLoaded;
 	private CooldownBasedData _continueAttempts;
@@ -70,7 +73,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 		base.Awake();
 
 		_gameScoreAnimator = gameScoreText.GetComponentInParent<Animator>();
-		_continueAttempts = new CooldownBasedData(GameData.MAX_CONTINUE_ATTEMPT, continueAttemptCooldown);
+		_continueAttempts = new CooldownBasedData(MAX_CONTINUE_ATTEMPT, continueAttemptCooldown);
 
 		Debug.Log("Game manager awoken.");
 	}

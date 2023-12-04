@@ -8,7 +8,6 @@ namespace CSTGames.DataPersistence
 	{
 		public long lastUpdated;
 
-		public const uint MAX_CONTINUE_ATTEMPT = 3;
 		public uint continueAttempts;
 		
 		/// <summary>

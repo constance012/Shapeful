@@ -6,37 +6,44 @@ using UnityEngine.Audio;
 
 public class MainMenu : MonoBehaviour
 {
-	[Header("References"), Space]
+	[Header("Audio Mixer"), Space]
 	[SerializeField] private AudioMixer mixer;
-	[SerializeField] private Animator animator;
+
+	[Header("UI References"), Space]
 	[SerializeField] private TextMeshProUGUI versionText;
 
-	private static bool _hasStartup;
+	[Header("Game Object References"), Space]
+	[SerializeField] private Animator animator;
+
+	// Private fields.
+	private static bool _hasStartedUp;
 
 	private IEnumerator Start()
 	{
 		#if UNITY_EDITOR
-		_hasStartup = false;
-		#endif
+		_hasStartedUp = false;
+#endif
 
+		GameDataManager.Instance.LoadGame(false);
 		versionText.text = Application.version;
 		
-		if (!_hasStartup)
+		if (!_hasStartedUp)
 		{
 			InternalInitialization();
 			animator.Play("Prepare For Startup");
 
 			yield return new WaitForSecondsRealtime(.5f);
 			animator.Play("Initial Startup");
+			
 
-			_hasStartup = true;
+			_hasStartedUp = true;
 		}
 	}
 
+	#region Callback method for UI Events.
 	public void StartGame()
 	{
 		LevelManager.Instance.LoadScene("Scenes/Game");
-		GameDataManager.Instance.LoadGame(false);
 	}
 
 	public void QuitGame()
@@ -44,6 +51,7 @@ public class MainMenu : MonoBehaviour
 		Debug.Log("Quiting player...");
 		Application.Quit();
 	}
+	#endregion
 
 	private void InternalInitialization()
 	{
@@ -52,5 +60,7 @@ public class MainMenu : MonoBehaviour
 		mixer.SetFloat("musicVol", UserSettings.MusicVolume);
 		mixer.SetFloat("soundsVol", UserSettings.SoundsVolume);
 		QualitySettings.SetQualityLevel(UserSettings.QualityLevel);
+
+		LevelManager.Instance.EnableParticleEffect(UserSettings.EnableBackgroundParticles);
 	}
 }
