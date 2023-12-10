@@ -13,7 +13,7 @@ namespace CSTGames.DataPersistence
 		/// <summary>
 		/// Stores the remaining cooldown time of the next continue attempt (totalHours, minutes, seconds). 
 		/// </summary>
-		private Vector3Int continueAttemptRemainingCD = Vector3Int.zero;
+		private Vector3Int continueAttemptRemainingCD;
 		public Vector3Int ContinueAttemptRemainingCD
 		{
 			get { return continueAttemptRemainingCD; }
@@ -30,7 +30,8 @@ namespace CSTGames.DataPersistence
 		}
 
 		public int highscore;
-		public Color playerColor;
+		public Color primaryColor;
+		public Color secondaryColor;
 
 		/// <summary>
 		/// Initialize with default values of the data.
@@ -38,10 +39,13 @@ namespace CSTGames.DataPersistence
 		public GameData()
 		{
 			this.lastUpdated = DateTime.Now.ToBinary();
-			this.continueAttempts = 2;
+
+			this.continueAttempts = GameManager.MAX_CONTINUE_ATTEMPT;
+			this.continueAttemptRemainingCD = Vector3Int.zero;
 
 			this.highscore = 0;
-			this.playerColor = Color.white;
+			this.primaryColor = Color.white;
+			this.secondaryColor = Color.black;
 		}
 	}
 }

@@ -65,6 +65,12 @@ public static class UserSettings
 		get { return PlayerPrefs.GetInt("EnableBackgroundParticles", 1) == 1; }
 		set { PlayerPrefs.SetInt("EnableBackgroundParticles", value ? 1 : 0); }
 	}
+
+	public static bool SecondaryColorSameAsPrimary
+	{
+		get { return PlayerPrefs.GetInt("SecondaryColorSameAsPrimary", 0) == 1; }
+		set { PlayerPrefs.SetInt("SecondaryColorSameAsPrimary", value ? 1 : 0); }
+	}
 	#endregion
 
 	#region Controls Settings
@@ -96,6 +102,7 @@ public static class UserSettings
 				TargetFramerate = 120f;
 				UseVsync = false;
 				EnableBackgroundParticles = true;
+				SecondaryColorSameAsPrimary = false;
 				break;
 
 			case SettingSection.Controls:
@@ -113,6 +120,7 @@ public static class UserSettings
 				TargetFramerate = 120f;
 				UseVsync = false;
 				EnableBackgroundParticles = true;
+				SecondaryColorSameAsPrimary = false;
 
 				SelectedKeyset = "Default";
 				break;

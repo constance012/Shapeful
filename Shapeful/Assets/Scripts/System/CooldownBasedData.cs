@@ -86,6 +86,8 @@ public class CooldownBasedData
 
 			TimeSpan completedValueCD = TotalCooldown - _remainingCD;
 			value = data.continueAttempts + (uint)Math.Floor(completedValueCD / baseCooldown);
+
+			value = (uint)Mathf.Min(value, maxValue);
 		}
 	}
 

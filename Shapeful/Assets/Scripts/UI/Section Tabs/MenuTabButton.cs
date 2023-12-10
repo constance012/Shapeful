@@ -3,19 +3,23 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Graphic))]
 public class MenuTabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 	[Header("Current Tab Group"), Space]
 	[SerializeField] private TabGroup tabGroup;
-	[SerializeField] private bool isStartupTab;
+	[SerializeField] private bool selectOnStartup;
 
 	[Header("Content Page"), Space]
 	public GameObject contentPage;
 
 	[Header("Effect"), Space]
 	[SerializeField] private float colorFadeTime;
+
+	[Header("Event"), Space]
+	public UnityEvent onTabSelected;
 
 	// Private fields.
 	private Graphic _graphic;
@@ -31,8 +35,8 @@ public class MenuTabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
 	private void Start()
 	{
-		if (isStartupTab)
-			tabGroup.OnTabSelected(this);
+		if (selectOnStartup)
+			OnPointerClick(null);
 	}
 
 	#region Interface Methods.
@@ -43,21 +47,23 @@ public class MenuTabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 	
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		tabGroup.OnTabExit(this);
+		tabGroup.OnTabExit();
 	}
 	
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		tabGroup.OnTabSelected(this);
+		onTabSelected?.Invoke();
 	}
 	#endregion
 
 	public void SetContentState(bool state)
 	{
-		contentPage.SetActive(state);
+		if (contentPage != null)
+			contentPage.SetActive(state);
 	}
 
-	public void SetTextColor(Color color)
+	public void SetGraphicColor(Color color)
 	{
 		if (_coroutine != null)
 			StopCoroutine(_coroutine);

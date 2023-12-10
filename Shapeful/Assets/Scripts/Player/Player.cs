@@ -7,9 +7,13 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 {
 	private enum FlashType { Damage, Heal, PowerUp }
 
-	[Header("References"), Space]
+	[Header("Prefab"), Space]
 	[SerializeField] private GameObject damageTextPrefab;
+
+	[Header("Graphics"), Space]
 	[SerializeField] private GameObject graphics;
+	[SerializeField] private SpriteRenderer primaryRenderer;
+	[SerializeField] private SpriteRenderer secondaryRenderer;
 
 	[Header("Move Speed"), Space]
 	[SerializeField] private float moveSpeed;
@@ -25,8 +29,9 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 	[SerializeField] private Color powerUpColor;
 
 	// Private fields.
-	private LocalKeyword _isFlashing;
-	private Material _mainMaterial;
+	private Material _overlayMaterial;
+	private Material _trailMaterial;
+
 	private ParticleSystem _deathEffect;
 	private ParticleSystem _powerUpEffect;
 	
@@ -36,11 +41,11 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 
 	private void Awake()
 	{
-		_mainMaterial = this.GetComponentInChildren<SpriteRenderer>("Graphics/Main").material;
+		_overlayMaterial = this.GetComponentInChildren<SpriteRenderer>("Graphics/Damage Flash Overlay").material;
+		_trailMaterial = primaryRenderer.GetComponent<TrailRenderer>().material;
+
 		_deathEffect = this.GetComponentInChildren<ParticleSystem>("Death Effect");
 		_powerUpEffect = this.GetComponentInChildren<ParticleSystem>("Power-up In Effect");
-
-		_isFlashing = new LocalKeyword(_mainMaterial.shader, "_IS_FLASHING_ON");
 	}
 
 	private void Start()
@@ -98,9 +103,10 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 
 	public void LoadData(GameData data)
 	{
-		Color currentColor = data.playerColor;
+		primaryRenderer.color = data.primaryColor;
+		secondaryRenderer.color = UserSettings.SecondaryColorSameAsPrimary ? data.primaryColor : data.secondaryColor;
 
-		_mainMaterial.SetColor("_BaseColor", currentColor);
+		_trailMaterial.SetColor("_Color", data.primaryColor);
 	}
 	#endregion
 
@@ -203,17 +209,15 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 
 	private IEnumerator DamageFlash(FlashType type)
 	{
-		_mainMaterial.EnableKeyword(_isFlashing);
-
 		if (type == FlashType.Damage)
 		{
-			_mainMaterial.SetColor("_FlashColor", damageColor);
+			_overlayMaterial.SetColor("_FlashColor", damageColor);
 
 			int totalFlashCount = damageFlashCount * 2;
 
 			for (int i = 1; i <= totalFlashCount; i++)
 			{
-				_mainMaterial.SetFloat("_FlashIntensity", i % 2 != 0 ? 1f : 0f);
+				_overlayMaterial.SetFloat("_FlashIntensity", i % 2 != 0 ? 1f : 0f);
 
 				yield return new WaitForSeconds(.05f);
 			}
@@ -223,18 +227,16 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 			float intensity = 1f;
 
 			Color color = type == FlashType.Heal ? healColor : powerUpColor;
-			_mainMaterial.SetColor("_FlashColor", color);
+			_overlayMaterial.SetColor("_FlashColor", color);
 
 			do
 			{
-				_mainMaterial.SetFloat("_FlashIntensity", intensity);
+				_overlayMaterial.SetFloat("_FlashIntensity", intensity);
 				intensity -= Time.deltaTime;
 
 				yield return null;
 			}
 			while (intensity >= 0f);
 		}
-
-		_mainMaterial.DisableKeyword(_isFlashing);
 	}
 }

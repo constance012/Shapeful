@@ -52,7 +52,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	public static bool IsPause { get; private set; }
 
 	// Private fields.
-	private const uint MAX_CONTINUE_ATTEMPT = 3;
+	public const uint MAX_CONTINUE_ATTEMPT = 3;
 
 	private Animator _gameScoreAnimator;
 	private DateTime _dataLastLoaded;
@@ -98,7 +98,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 		if (GameOver && _continueAttempts.IsOnCooldown)
 		{
 			// TODO - Increase the attempt when the cooldown is finished.
-			_continueAttempts.RemainingCD -= TimeSpan.FromSeconds((float)Time.deltaTime);
+			_continueAttempts.RemainingCD -= TimeSpan.FromSeconds(Time.deltaTime);
 
 			continueButton.SetStatus(_continueAttempts.value >= 1, _continueAttempts.NextValueRemainingCD);
 			continueAttemptText.text = $"REMAINING ATTEMPTS: <color=#AE2929> {_continueAttempts.value} </color>";
