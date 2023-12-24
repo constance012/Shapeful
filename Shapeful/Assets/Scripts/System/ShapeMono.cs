@@ -13,9 +13,17 @@ public class ShapeMono : MonoBehaviour
 	[SerializeField] private EdgeCollider2D _edgeCollider;
 	[SerializeField] private EdgeCollider2D _scoreTrigger;
 
+	public static float SpinSpeedMultiplier { get; set; }
+
 	// Private fields.
 	private GameObject _collectable;
 	private float _spinSpeed;
+
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+	private static void ReloadStaticFields()
+	{
+		SpinSpeedMultiplier = 1f;
+	}
 
 	private void Start()
 	{
@@ -44,7 +52,7 @@ public class ShapeMono : MonoBehaviour
 	{
 		if (shapeData.canSpin)
 		{
-			transform.Rotate(transform.forward, _spinSpeed * Time.deltaTime);
+			transform.Rotate(transform.forward, _spinSpeed * SpinSpeedMultiplier * Time.deltaTime);
 		}
 	}
 
@@ -59,14 +67,14 @@ public class ShapeMono : MonoBehaviour
 		
 		_lineRenderer.colorGradient = data.colorGradient;
 
-		List<Vector2> colliderPoints = new List<Vector2>();
+		Vector2[] colliderPoints = new Vector2[sideCount];
 
 		for (int i = 0; i < sideCount; i++)
 		{
-			colliderPoints.Add(new Vector2(data._vertices[i].x, data._vertices[i].y));
+			colliderPoints[i] = new Vector2(data._vertices[i].x, data._vertices[i].y);
 		}
 
-		_edgeCollider.SetPoints(colliderPoints);
+		_edgeCollider.points = colliderPoints;
 
 		Vector2[] scorePoints = _scoreTrigger.points;
 		scorePoints[0] = data._vertices[0];
@@ -77,8 +85,8 @@ public class ShapeMono : MonoBehaviour
 		if (collectable != null)
 		{
 			_collectable = Instantiate(collectable.gameObject, this.transform);
-			_collectable.transform.localPosition = shapeData.GetCollectablePosition;
-			_collectable.transform.localScale = Vector3.one * .7f / this.transform.localScale.x;
+			_collectable.transform.localPosition = shapeData.CollectablePosition;
+			_collectable.transform.localScale = Vector3.one / this.transform.localScale.x;
 		}
 	}
 }

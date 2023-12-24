@@ -323,7 +323,7 @@ Transform:
   - {fileID: 8692363085630983074}
   - {fileID: 2592419240387502147}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2931790410486071029
 MonoBehaviour:
@@ -388,6 +388,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5776172374212082532, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalX.minScalar
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalY.minScalar
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalZ.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalOffsetX.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018546585104992059, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}
+      propertyPath: VelocityModule.orbitalOffsetY.scalar
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7652310808995625400, guid: 7918f94c459daa24dba3ff5cc78e1ebf, type: 3}

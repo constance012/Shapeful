@@ -5844,6 +5844,7 @@ Transform:
   - {fileID: 806722087}
   - {fileID: 1130224742}
   - {fileID: 1712561529}
+  - {fileID: 456410987}
   m_Father: {fileID: 1335748691}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6829,6 +6830,90 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451641540}
   m_CullTransparentMesh: 1
+--- !u!1 &456410985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456410987}
+  - component: {fileID: 456410986}
+  m_Layer: 3
+  m_Name: Power Up Visual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &456410986
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456410985}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 7
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 0.6127626, g: 0.82092637, b: 0.8490566, a: 0.627451}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &456410987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456410985}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 287294991}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -9069,6 +9154,7 @@ MonoBehaviour:
   graphics: {fileID: 287294990}
   primaryRenderer: {fileID: 806722089}
   secondaryRenderer: {fileID: 1130224743}
+  powerUpVisualRenderer: {fileID: 456410986}
   moveSpeed: 350
   maxHealth: 3
   damageFlashCount: 5
@@ -9340,6 +9426,21 @@ MonoBehaviour:
   powerUps: []
   powerUpsPanel: {fileID: 2052093595}
   uiIndicatorPrefab: {fileID: 3504303140971397901, guid: 52822a26251fa59418fefd1b11a3d052, type: 3}
+  onPowerUpRemoved:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1335748692}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: OnAnyPowerUpRemoved
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1430985882
 Transform:
   m_ObjectHideFlags: 0
@@ -10060,11 +10161,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2178059337699256436, guid: 17ace14b9524cae4ba587ce679d5cc1e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 540
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2178059337699256436, guid: 17ace14b9524cae4ba587ce679d5cc1e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 960
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2178059337699256436, guid: 17ace14b9524cae4ba587ce679d5cc1e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -10384,11 +10485,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4a081f5cb23e8a144831c1cf5d7e2d3f, type: 2}
   - {fileID: 11400000, guid: 9ffb4bbd4b3fe224ebeab5dd9e6c088a, type: 2}
   collectables:
+  - {fileID: 7307815017393891572, guid: dea92538e4c27414ea0b0874193924e4, type: 3}
   - {fileID: 4883313044972122075, guid: 3132e5abf3f16e14ea97226a122e6292, type: 3}
-  - {fileID: 2645629461352548882, guid: 905b5e94db72c5c4eac2adb047406926, type: 3}
-  - {fileID: 2645629461352548882, guid: 9b931f01e8ad0074e9ee0740ec1eafbb, type: 3}
-  - {fileID: 2645629461352548882, guid: 76837e1e1ef67da45bccc4b6d29b292b, type: 3}
-  collectableSpawnChance: 0.2
+  - {fileID: 3872571650853721469, guid: 055749bea6be4c243b881d5c2c67ad63, type: 3}
+  - {fileID: 3872571650853721469, guid: d971815fca8670b4b98b553bcae7aaf2, type: 3}
+  - {fileID: 3872571650853721469, guid: a33cd26d3c9ce644f841301534bfc0a4, type: 3}
+  - {fileID: 3872571650853721469, guid: 6c2df2b5b20b52c4bbb5ae55bf22765b, type: 3}
+  collectableSpawnChance: 1
   spawnDelayScale: 0.5
   accumulateTriggerChance: 0.4
   accumulateGainRange: {x: 7, y: 20}
@@ -10486,7 +10589,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 70
+  m_Spacing: 75
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -10771,6 +10874,10 @@ PrefabInstance:
     - target: {fileID: 7112040311701795, guid: 24b70e9b5c5ba634dbd650aa35dc6c73, type: 3}
       propertyPath: m_Name
       value: Audio Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 829548262812639011, guid: 24b70e9b5c5ba634dbd650aa35dc6c73, type: 3}
+      propertyPath: audioArray.Array.data[6].volume
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8067048845964958824, guid: 24b70e9b5c5ba634dbd650aa35dc6c73, type: 3}
       propertyPath: m_RootOrder

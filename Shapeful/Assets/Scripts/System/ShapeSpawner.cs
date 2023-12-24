@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class ShapeSpawner : Singleton<ShapeSpawner>
@@ -26,6 +27,7 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 	private Vector2Int accumulateGainRange;
 
 	// Private fields.
+	private Coroutine _coroutine;
 	private ShapeData _nextShape;
 	private float _delay;
 	private int _specialSpawningMeter = 0;
@@ -45,6 +47,15 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 			SpawnShape();
 		}
 	}
+
+	public void ControlShapesSpinningSpeed(bool isStopping, float duration)
+	{
+		if (_coroutine != null)
+			StopCoroutine(_coroutine);
+
+		_coroutine = StartCoroutine(ManageSpinningSpeed(isStopping, duration));
+	}
+
 
 	private void SpawnShape()
 	{
@@ -110,6 +121,36 @@ public class ShapeSpawner : Singleton<ShapeSpawner>
 				_specialSpawningMeter = 0;
 				_specialShapePrevious = true;
 			}
+		}
+	}
+
+	private IEnumerator ManageSpinningSpeed(bool isStopping, float duration)
+	{
+		float elapsedTime = 0f;
+
+		if (isStopping)
+		{
+			while (elapsedTime < duration)
+			{
+				ShapeMono.SpinSpeedMultiplier = Mathf.Lerp(1f, 0f, elapsedTime / duration);
+				elapsedTime += Time.deltaTime;
+
+				yield return null;
+			}
+
+			ShapeMono.SpinSpeedMultiplier = 0f;
+		}
+		else
+		{
+			while (elapsedTime < duration)
+			{
+				ShapeMono.SpinSpeedMultiplier = Mathf.Lerp(0f, 1f, elapsedTime / duration);
+				elapsedTime += Time.deltaTime;
+
+				yield return null;
+			}
+
+			ShapeMono.SpinSpeedMultiplier = 1f;
 		}
 	}
 }

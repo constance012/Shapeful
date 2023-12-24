@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class Collectable : MonoBehaviour
 {
-	[Header("References"), Space]
+	[Header("On Collect Effect"), Space]
 	[SerializeField] private ParticleSystem collectEffect;
     protected static Player player;
 

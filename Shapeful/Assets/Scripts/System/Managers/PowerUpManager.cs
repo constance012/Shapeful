@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PowerUpManager : Singleton<PowerUpManager>
 {
@@ -8,6 +9,9 @@ public class PowerUpManager : Singleton<PowerUpManager>
 	[Header("References"), Space]
 	[SerializeField] private Transform powerUpsPanel;
 	[SerializeField] private GameObject uiIndicatorPrefab;
+
+	[Header("Events"), Space]
+	public UnityEvent<PowerUp> onPowerUpRemoved = new UnityEvent<PowerUp>();
 
 	public bool IsLimitReached => powerUpsPanel.transform.childCount > 5;
 	public bool AnyActivePowerUps => powerUps.Count > 0;
@@ -20,7 +24,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
 		}
 
 		// Remove any expired power ups first.
-		powerUps.RemoveAll(TryRemoveExpired);
+		powerUps.RemoveAll(CheckRemovable);
 
 		foreach(PowerUp powerUp in powerUps)
 		{
@@ -32,36 +36,66 @@ public class PowerUpManager : Singleton<PowerUpManager>
 	/// Tries applying this power-up to the player.
 	/// </summary>
 	/// <param name="powerUp"></param>
-	/// <returns> <b>True</b> if the player doesn't currently have the same power-up applied, <b>false</b> otherwise. </returns>
+	/// <returns> <b>True</b> if the power-up has been applied successfully, <b>False</b> otherwise. </returns>
 	public bool TryApply(PowerUp powerUp)
 	{
+		if (powerUp == null)
+			return false;
+
 		Debug.Log($"Attempting to apply {powerUp.powerUpName} to the player.");
 
-		if (!HasAny(powerUp.powerUpName))
+		if (!HasAny(powerUp.powerUpName, out PowerUp existing))
 		{
 			powerUp.IndicatorUI = Instantiate(uiIndicatorPrefab, powerUpsPanel).GetComponent<PowerUpIndicator>();
 
 			powerUps.Add(powerUp);
-			return true;
+			powerUp.ApplyEffect();
 		}
 		else
 		{
-			// Reset the duration if this same power-up is already existed.
-			PowerUp existing = Get(powerUp.powerUpName);
+			// Reset the duration and use times if this same power-up is already existed.
 			existing.duration = powerUp.duration;
-			
-			return false;
+			existing.SetUseTimes(powerUp.maxUseTimes);
+		}
+
+		return true;
+	}
+
+	public bool HasAny(string targetName, out PowerUp target)
+	{
+		target = powerUps.Find(powerUp => powerUp.CompareName(targetName));
+		return target != null;
+	}
+
+	public void DecreaseUseTimes(string powerUpName)
+	{
+		if (HasAny(powerUpName, out PowerUp target))
+		{
+			target.UpdateUseTimes();
 		}
 	}
 
-	public bool HasAny(string targetName)
+	public void DecreaseUseTimes(IVisualPowerUp visualPowerUp)
 	{
-		return powerUps.Find(powerUp => powerUp.CompareName(targetName)) != null;
+		(visualPowerUp as PowerUp).UpdateUseTimes();
 	}
 
-	public PowerUp Get(string targetName)
+	public bool IsVisualPowerUp(string powerUpName, out IVisualPowerUp visualPowerUp)
 	{
-		return powerUps.Find(powerUp => powerUp.CompareName(targetName));
+		HasAny(powerUpName, out PowerUp target);
+		Debug.Log(target.GetType());
+		Debug.Log(target as IVisualPowerUp == null);
+
+		visualPowerUp = target as IVisualPowerUp;
+		return visualPowerUp != null;
+	}
+
+	public bool IsVisualPowerUp(PowerUp target, out IVisualPowerUp visualPowerUp)
+	{
+		Debug.Log($"Currently checking if {target.GetType()} is a visual power-up.");
+
+		visualPowerUp = target as IVisualPowerUp;
+		return visualPowerUp != null;
 	}
 
 	public void ForceRemoveAll()
@@ -75,13 +109,15 @@ public class PowerUpManager : Singleton<PowerUpManager>
 		});
 	}
 
-	private bool TryRemoveExpired(PowerUp powerUp)
+	private bool CheckRemovable(PowerUp powerUp)
 	{
-		if (powerUp.DurationExpired)
+		if (powerUp.ReadyToBeRemoved)
 		{
-			Debug.Log($"Duration expired, removing {powerUp.powerUpName}.");
+			Debug.Log($"Ready to be removed, removing {powerUp.powerUpName}.");
 			
 			powerUp.RemoveEffect();
+			onPowerUpRemoved?.Invoke(powerUp);
+
 			return true;
 		}
 

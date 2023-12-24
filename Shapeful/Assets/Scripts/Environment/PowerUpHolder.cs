@@ -5,7 +5,8 @@ public class PowerUpHolder : Collectable
 	[Header("Attached Power Up"), Space]
 	[SerializeField] private PowerUp powerUp;
 
-	[Header("References"), Space]
+	[Header("Holder References"), Space]
+	[SerializeField] private ParticleSystem applyEffect;
 	[SerializeField] private SpriteRenderer spriteRenderer;
 
 	// Private fields.
@@ -22,13 +23,15 @@ public class PowerUpHolder : Collectable
 	protected override void OnCollected()
 	{
 		AudioManager.Instance.PlayWithRandomPitch("Power Up", .8f, 1.2f);
-		player.PowerUpReceived(_currentPowerUp.powerUpName);
 
 		// TODO: Add data to power up manager.
 		// Apply the effect instantly.
 		if (PowerUpManager.Instance.TryApply(_currentPowerUp))
 		{
-			_currentPowerUp.ApplyEffect();
+			if (applyEffect != null)
+				Instantiate(applyEffect, player.transform.position, Quaternion.identity);
+			
+			player.OnPowerUpReceived(_currentPowerUp.powerUpName);
 		}
 	}
 }

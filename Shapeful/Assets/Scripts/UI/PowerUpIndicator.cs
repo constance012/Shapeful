@@ -8,6 +8,7 @@ public class PowerUpIndicator : MonoBehaviour
 	[SerializeField] private Image timer;
 	[SerializeField] private Image icon;
 	[SerializeField] private TextMeshProUGUI durationText;
+	[SerializeField] private TextMeshProUGUI useTimesText;
 
 	[Header("Tooltip Trigger"), Space]
 	[SerializeField] private TooltipTrigger tooltip;
@@ -23,14 +24,22 @@ public class PowerUpIndicator : MonoBehaviour
 		this.icon.sprite = powerUp.icon;
 		durationText.text = _baseDuration.ToString();
 
+		useTimesText.text = powerUp.maxUseTimes.ToString();
+		useTimesText.gameObject.SetActive(powerUp.hasUseTimes);
+
 		tooltip.header = powerUp.powerUpName;
 		tooltip.content = powerUp.description;
 	}
 
-	public void UpdateUI(float currentDuration)
+	public void UpdateDurationUI(float currentDuration)
 	{
 		timer.fillAmount = currentDuration / _baseDuration;
 
 		durationText.text = Mathf.FloorToInt(currentDuration + 1f).ToString("0");
+	}
+
+	public void UpdateUseTimesUI(uint remaining)
+	{
+		useTimesText.text = remaining.ToString();
 	}
 }

@@ -1,6 +1,5 @@
 using CSTGames.DataPersistence;
 using System.Collections;
-using UnityEngine.Rendering;
 using UnityEngine;
 
 public class Player : MonoBehaviour, ISaveDataTransceiver
@@ -14,6 +13,7 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 	[SerializeField] private GameObject graphics;
 	[SerializeField] private SpriteRenderer primaryRenderer;
 	[SerializeField] private SpriteRenderer secondaryRenderer;
+	[SerializeField] private SpriteRenderer powerUpVisualRenderer;
 
 	[Header("Move Speed"), Space]
 	[SerializeField] private float moveSpeed;
@@ -62,7 +62,6 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 		if (_powerUpEffect.isPlaying)
 		{
 			_powerUpEffect.transform.rotation = Quaternion.identity;
-			OnAnyPowerUpsExpired();
 		}
 
 #if UNITY_EDITOR
@@ -149,13 +148,18 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 
 		if (amount > 0)
 		{
-			GenerateDamageText(amount, DamageText.DefaultDamageColor, DamageTextStyle.Normal);
+			GenerateDamageText(amount, DamageText.DamageColor, DamageTextStyle.Normal);
 			AudioManager.Instance.PlayWithRandomPitch("Collide 1", .5f, 1.5f);
 		}
 		else
 		{
 			GenerateDamageText("Blocked", new Color(.8f, .8f, .8f), DamageTextStyle.Critical);
 			AudioManager.Instance.PlayWithRandomPitch("Damage Blocked", .8f, 1.3f);
+
+			PowerUpManager.Instance.IsVisualPowerUp("Shield", out IVisualPowerUp visualPowerUp);
+			PowerUpManager.Instance.DecreaseUseTimes(visualPowerUp);
+
+			powerUpVisualRenderer.sprite = visualPowerUp.GetSpriteAtCurrentState();
 		}
 
 		StopAllCoroutines();
@@ -176,7 +180,7 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 		_currentHealth += amount;
 		_currentHealth = Mathf.Min(maxHealth, _currentHealth);
 
-		GenerateDamageText(amount, DamageText.DefaultHealingColor, DamageTextStyle.Normal);
+		GenerateDamageText($"+{amount} HP", DamageText.HealingColor, DamageTextStyle.Small);
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.Heal));
@@ -184,21 +188,35 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 		GameManager.Instance.UpdatePlayerHealth(maxHealth, _currentHealth);
 	}
 
-	public void PowerUpReceived(string powerUpName)
+	public void OnPowerUpReceived(string powerUpName)
 	{
 		if (_powerUpEffect.isStopped)
 			_powerUpEffect.Play();
 
-		GenerateDamageText(powerUpName, DamageText.DefaultPowerUpColor, DamageTextStyle.Normal);
+		if (PowerUpManager.Instance.IsVisualPowerUp(powerUpName, out IVisualPowerUp visualPowerUp))
+		{
+			powerUpVisualRenderer.sprite = visualPowerUp.GetSpriteAtCurrentState();
+			powerUpVisualRenderer.color = visualPowerUp.VisualColor;
+		}
+
+		Debug.Log(visualPowerUp == null);
+
+		GenerateDamageText(powerUpName, DamageText.PowerUpColor, DamageTextStyle.Normal);
 
 		StopAllCoroutines();
 		StartCoroutine(DamageFlash(FlashType.PowerUp));
 	}
 
-	public void OnAnyPowerUpsExpired()
+	public void OnAnyPowerUpRemoved(PowerUp removed)
 	{
 		if (!PowerUpManager.Instance.AnyActivePowerUps)
 			_powerUpEffect.Stop();
+
+		if (PowerUpManager.Instance.IsVisualPowerUp(removed, out _))
+		{
+			powerUpVisualRenderer.sprite = null;
+			powerUpVisualRenderer.color = Color.white;
+		}
 	}
 
 	public void GenerateDamageText(object displayObject, Color textColor, DamageTextStyle style)

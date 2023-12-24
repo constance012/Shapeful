@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEditor;
 
-public enum DamageTextStyle { Normal, Critical }
+public enum DamageTextStyle { Small, Normal, Critical }
 
 /// <summary>
 /// A class to generates an UI popup text.
@@ -19,10 +19,11 @@ public class DamageText : MonoBehaviour
 	[SerializeField] private AnimationCurve velocityCurve;
 	[SerializeField] private Animator animator;
 
-	public static readonly Color DefaultCriticalColor = new Color(.821f, .546f, .159f);
-	public static readonly Color DefaultDamageColor = Color.red;
-	public static readonly Color DefaultHealingColor = Color.green;
-	public static readonly Color DefaultPowerUpColor = new Color(.707f, .11f, .353f);
+	public static readonly Color CriticalColor = new Color(.821f, .546f, .159f);
+	public static readonly Color DamageColor = Color.red;
+	public static readonly Color HealingColor = Color.green;
+	public static readonly Color PowerUpColor = new Color(.707f, .11f, .353f);
+	public static readonly Color BonusScoreColor = new Color(.792f, .13f, .714f);
 
 	// Private fields.
 	private Color _currentTextColor;
@@ -65,7 +66,7 @@ public class DamageText : MonoBehaviour
 
 		DamageText dmgText = dmgTextObj.GetComponent<DamageText>();
 
-		Color textColor = style == DamageTextStyle.Critical ? DefaultCriticalColor : DefaultDamageColor;
+		Color textColor = style == DamageTextStyle.Critical ? CriticalColor : DamageColor;
 
 		dmgText.Setup(textColor, textContent, style);
 		return dmgText;

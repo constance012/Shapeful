@@ -15,7 +15,14 @@ MonoBehaviour:
   powerUpName: Shield
   duration: 10
   icon: {fileID: 1281274086, guid: f8c567dc63eefe14482bcec597026fbf, type: 3}
-  description: Blocks all shapes' contact damage for a short amount of time. Scores
-    will be counted if the damage is completely negated.
+  description: Blocks the contact damage of all shapes for a short amount of time.
+    Scores will be counted if the damage is completely negated.
+  hasUseTimes: 1
+  maxUseTimes: 3
   damageReductionScale: 1
-  breakable: 0
+  visuals:
+  - {fileID: 377048968, guid: 171d063c5f7b5a149a69c1d3563bb447, type: 3}
+  - {fileID: -888108620, guid: 171d063c5f7b5a149a69c1d3563bb447, type: 3}
+  - {fileID: 623306240, guid: 171d063c5f7b5a149a69c1d3563bb447, type: 3}
+  - {fileID: 1425010691, guid: 171d063c5f7b5a149a69c1d3563bb447, type: 3}
+  visualColor: {r: 0.6117647, g: 0.81960785, b: 0.8509804, a: 0.627451}

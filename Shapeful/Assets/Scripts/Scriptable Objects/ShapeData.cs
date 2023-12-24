@@ -20,12 +20,12 @@ public class ShapeData : ScriptableObject
 	[Space, Min(1f)] public float shrinkSpeed;
 	[Min(1f)] public float initialScale;
 
-	[Header("Player Affect Properties"), Space]
+	[Header("Player Affected Properties"), Space]
 	[Min(1)] public int scoreGain;
 	[Min(1)] public int contactDamage;
 
 	// Properties.
-	public Vector3 GetCollectablePosition
+	public Vector3 CollectablePosition
 	{
 		get
 		{
@@ -48,8 +48,10 @@ public class ShapeData : ScriptableObject
 
 		for (int i = 1; i < vertexCount; i++)
 		{
-			float x = Mathf.Cos(angleBetweenAdjacentVertices * i * Mathf.Deg2Rad);
-			float y = Mathf.Sin(angleBetweenAdjacentVertices * i * Mathf.Deg2Rad);
+			float nextAngle = angleBetweenAdjacentVertices * i * Mathf.Deg2Rad;
+
+			float x = Mathf.Cos(nextAngle);
+			float y = Mathf.Sin(nextAngle);
 
 			float roundedX = (float)Math.Round(x, 3);
 			float roundedY = (float)Math.Round(y, 3);

@@ -16,7 +16,7 @@ public class CameraShaker : Singleton<CameraShaker>
 
 	private float _localInitialAmplitude;
 	private float _localShakeDuration;
-	private bool _isLocalShake;
+	private bool _isGlobalShake;
 
 	protected override void Awake()
 	{
@@ -29,7 +29,7 @@ public class CameraShaker : Singleton<CameraShaker>
 	{
 		if (_remainingTime > 0f)
 		{
-			if (!_isLocalShake)
+			if (_isGlobalShake)
 				_shaker.m_AmplitudeGain = Mathf.Lerp(globalInitialAmplitude, 0f, 1f - (_remainingTime / globalShakeDuration));
 			else
 				_shaker.m_AmplitudeGain = Mathf.Lerp(_localInitialAmplitude, 0f, 1f - (_remainingTime / _localShakeDuration));
@@ -44,13 +44,13 @@ public class CameraShaker : Singleton<CameraShaker>
 	}
 
 	/// <summary>
-	/// Shakes the camera using the global shake settings.
+	/// Shakes the camera using the GLOBAL shake settings.
 	/// </summary>
 	public void ShakeCamera()
 	{
 		_shaker.m_AmplitudeGain = globalInitialAmplitude;
 		_remainingTime = globalShakeDuration;
-		_isLocalShake = false;
+		_isGlobalShake = true;
 	}
 
 	/// <summary>
@@ -65,6 +65,6 @@ public class CameraShaker : Singleton<CameraShaker>
 
 		_shaker.m_AmplitudeGain = amplitude;
 		_remainingTime = duration;
-		_isLocalShake = true;
+		_isGlobalShake = false;
 	}
 }

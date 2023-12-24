@@ -367,7 +367,7 @@ TextureImporter:
         width: 17
         height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -375,6 +375,132 @@ TextureImporter:
       bones: []
       spriteID: cf362b21c95ac134f96fcf26bc7b91ad
       internalID: 1871679496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: X_Colorable
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 136
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bcc47bae2a66f24aaf3423b8820b481
+      internalID: 2041892649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Border_2
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 119
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e1207fcc1973104780e71514a613433
+      internalID: 1270577768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Border_3
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 119
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3252d3be2aa1ac2439daf3da96856c3c
+      internalID: 1953470819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Border_4
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 119
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca4e95d552649f644bf96c6fa59fbe64
+      internalID: 1415470823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Border_5
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 119
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 944b7b384d20d2c4a8f51e83289fa973
+      internalID: -1828164039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Stopwatch_Icon
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 102
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 248495f5ecd5e074ba191b6931468d36
+      internalID: 856233456
       vertices: []
       indices: 
       edges: []
@@ -390,7 +516,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Bonus_Star_0: 1233926005
+      Bonus_Star_1: 1114450038
+      Bonus_Star_2: -2088185652
+      Bonus_Star_3: 351881267
+      Bonus_Star_4: 2130028831
+      Bonus_Star_5: -432750569
       Border_1: -1891338087
+      Border_2: 1270577768
+      Border_3: 1953470819
+      Border_4: 1415470823
+      Border_5: -1828164039
       Cirlce_Colorable: 1871679496
       Cross_Colorable: -402178153
       Heart_Colorable: -982627233
@@ -399,6 +535,8 @@ TextureImporter:
       Shield_Icon: 1281274086
       Star_1_Colorable: -1347116309
       Star_2_Colorable: 881439035
+      Stopwatch_Icon: 856233456
+      X_Colorable: 2041892649
       x2_Score_Icon: 582136287
       x3_Score_Icon: 1890552661
   mipmapLimitGroupName: 

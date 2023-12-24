@@ -11,16 +11,9 @@
         },
         {
             "m_Id": "1b434fe6564d4739a09d2e982249d4f3"
-        },
-        {
-            "m_Id": "9184507051354e17ba5fa6cff65f48c7"
         }
     ],
-    "m_Keywords": [
-        {
-            "m_Id": "d7ea33e55baa41ecb4ae078778a18de3"
-        }
-    ],
+    "m_Keywords": [],
     "m_Dropdowns": [],
     "m_CategoryData": [
         {
@@ -539,9 +532,6 @@
     "m_Name": "Damage Flash",
     "m_ChildObjectList": [
         {
-            "m_Id": "d7ea33e55baa41ecb4ae078778a18de3"
-        },
-        {
             "m_Id": "08130d6ed64749f8974d0543531fbc2e"
         },
         {
@@ -684,9 +674,6 @@
     "m_ChildObjectList": [
         {
             "m_Id": "dbcc7acef4c0448f903ca919b94a20fb"
-        },
-        {
-            "m_Id": "9184507051354e17ba5fa6cff65f48c7"
         }
     ]
 }
@@ -765,36 +752,6 @@
         "m_SerializableColors": []
     },
     "m_SerializedDescriptor": "SurfaceDescription.BaseColor"
-}
-
-{
-    "m_SGVersion": 3,
-    "m_Type": "UnityEditor.ShaderGraph.Internal.ColorShaderProperty",
-    "m_ObjectId": "9184507051354e17ba5fa6cff65f48c7",
-    "m_Guid": {
-        "m_GuidSerialized": "b55178c8-164a-4a78-9f55-5b15e9261181"
-    },
-    "m_Name": "Base Color",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Base Color",
-    "m_DefaultReferenceName": "_Base_Color",
-    "m_OverrideReferenceName": "_BaseColor",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_Precision": 0,
-    "overrideHLSLDeclaration": false,
-    "hlslDeclarationOverride": 0,
-    "m_Hidden": false,
-    "m_Value": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0,
-        "a": 0.0
-    },
-    "isMainColor": false,
-    "m_ColorMode": 0
 }
 
 {
@@ -1018,31 +975,6 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
-    "m_ObjectId": "d7ea33e55baa41ecb4ae078778a18de3",
-    "m_Guid": {
-        "m_GuidSerialized": "bbfefda2-4575-4db0-9ca7-a3e84c218af6"
-    },
-    "m_Name": "Is Flashing",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Is Flashing",
-    "m_DefaultReferenceName": "_IS_FLASHING",
-    "m_OverrideReferenceName": "_IS_FLASHING_ON",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_KeywordType": 0,
-    "m_KeywordDefinition": 0,
-    "m_KeywordScope": 0,
-    "m_KeywordStages": 63,
-    "m_Entries": [],
-    "m_Value": 0,
-    "m_IsEditable": true
 }
 
 {

@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	private double continueAttemptCooldown;
 	[SerializeField] private TextMeshProUGUI continueAttemptText;
 
-	[Header("References"), Space]
+	[Header("UI References"), Space]
 	[SerializeField] private TextMeshProUGUI gameScoreText;
 	[SerializeField] private TextMeshProUGUI healthText;
 
@@ -253,12 +253,11 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 
 			gameScoreText.text = Mathf.FloorToInt(timeLeft + 1f).ToString("0");
 
-			if (!previousTime.Equals(gameScoreText.text) && timeLeft > 0f)
+			if (!previousTime.Equals(gameScoreText.text))
 			{
 				_gameScoreAnimator.Play("Count Down", 0, 0f);
+				previousTime = gameScoreText.text;
 			}
-
-			previousTime = gameScoreText.text;
 		}
 
 		gameScoreText.text = _score.ToString();
