@@ -16,8 +16,7 @@ public class TabGroup : MonoBehaviour
 
 	public void Subscribe(MenuTabButton button)
 	{
-		if (tabButtons == null)
-			tabButtons = new List<MenuTabButton>();
+		tabButtons ??= new List<MenuTabButton>();
 
 		tabButtons.Add(button);
 		tabButtons.Sort(CompareTabButtons);

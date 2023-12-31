@@ -13,6 +13,7 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 	[SerializeField] private GameObject graphics;
 	[SerializeField] private SpriteRenderer primaryRenderer;
 	[SerializeField] private SpriteRenderer secondaryRenderer;
+	[SerializeField] private SpriteRenderer damageFlashOverlayRenderer;
 	[SerializeField] private SpriteRenderer powerUpVisualRenderer;
 
 	[Header("Move Speed"), Space]
@@ -41,7 +42,7 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 
 	private void Awake()
 	{
-		_overlayMaterial = this.GetComponentInChildren<SpriteRenderer>("Graphics/Damage Flash Overlay").material;
+		_overlayMaterial = damageFlashOverlayRenderer.material;
 		_trailMaterial = primaryRenderer.GetComponent<TrailRenderer>().material;
 
 		_deathEffect = this.GetComponentInChildren<ParticleSystem>("Death Effect");
@@ -102,6 +103,10 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 
 	public void LoadData(GameData data)
 	{
+		primaryRenderer.sprite = data.playerIconData.ReconstructPrimarySprite();
+		secondaryRenderer.sprite = data.playerIconData.ReconstructSecondarySprite();
+		damageFlashOverlayRenderer.sprite = primaryRenderer.sprite;
+
 		primaryRenderer.color = data.primaryColor;
 		secondaryRenderer.color = UserSettings.SecondaryColorSameAsPrimary ? data.primaryColor : data.secondaryColor;
 

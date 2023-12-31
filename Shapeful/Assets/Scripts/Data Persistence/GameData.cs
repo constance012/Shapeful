@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using UnityEditor;
+using System.Security.Cryptography;
 
 namespace CSTGames.DataPersistence
 {
@@ -30,6 +32,10 @@ namespace CSTGames.DataPersistence
 		}
 
 		public int highscore;
+
+		public PlayerIconData playerIconData;
+		public bool[] iconLockStates;
+
 		public Color primaryColor;
 		public Color secondaryColor;
 
@@ -44,8 +50,17 @@ namespace CSTGames.DataPersistence
 			this.continueAttemptRemainingCD = Vector3Int.zero;
 
 			this.highscore = 0;
+
+			this.playerIconData = new PlayerIconData();
+			this.iconLockStates = null;
+
 			this.primaryColor = Color.white;
 			this.secondaryColor = Color.black;
+		}
+
+		public void SetPlayerIconTextures(IconCustomizeMenu.PlayerIcon playerIcon)
+		{
+			this.playerIconData = new PlayerIconData(playerIcon);
 		}
 	}
 }

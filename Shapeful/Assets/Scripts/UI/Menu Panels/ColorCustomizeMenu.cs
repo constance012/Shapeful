@@ -3,17 +3,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
-{
+public class ColorCustomizeMenu : AppearanceMenu, ISaveDataTransceiver
+{	
 	[Header("UI References"), Space]
 	[SerializeField] private Slider redSlider;
 	[SerializeField] private Slider greenSlider;
 	[SerializeField] private Slider blueSlider;
 	[SerializeField] private Toggle sameAsPrimaryToggle;
-
-	[Space]
-	[SerializeField] private Image primaryPreview;
-	[SerializeField] private Image secondaryPreview;
 
 	public static bool primaryColorSelected;
 
@@ -25,13 +21,13 @@ public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
 	private Color _primaryColor;
 	private Color _secondaryColor;
 
-	private void Awake()
+	protected override void Awake()
 	{
 		_redText = redSlider.GetComponentInChildren<TextMeshProUGUI>("Value");
 		_greenText = greenSlider.GetComponentInChildren<TextMeshProUGUI>("Value");
 		_blueText = blueSlider.GetComponentInChildren<TextMeshProUGUI>("Value");
 		
-		GameDataManager.Instance.DistributeDataToTransceivers();
+		base.Awake();
 	}
 
 	#region Interface Methods.
@@ -50,21 +46,21 @@ public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
 	}
 	#endregion
 
-	#region Callback Method for UI Events.
+	#region Callback Methods for UI Events.
 	public void SetRedValue(float amount)
 	{
 		if (primaryColorSelected)
 		{
 			_primaryColor.r = amount;
-			primaryPreview.color = _primaryColor;
+			_primaryPreview.color = _primaryColor;
 
 			if (sameAsPrimaryToggle.isOn)
-				secondaryPreview.color = _primaryColor;
+				_secondaryPreview.color = _primaryColor;
 		}
 		else
 		{
 			_secondaryColor.r = amount;
-			secondaryPreview.color = _secondaryColor;
+			_secondaryPreview.color = _secondaryColor;
 		}
 
 		_redText.text = (255f * amount).ToString("0");
@@ -75,15 +71,15 @@ public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
 		if (primaryColorSelected)
 		{
 			_primaryColor.g = amount;
-			primaryPreview.color = _primaryColor;
+			_primaryPreview.color = _primaryColor;
 
 			if (sameAsPrimaryToggle.isOn)
-				secondaryPreview.color = _primaryColor;
+				_secondaryPreview.color = _primaryColor;
 		}
 		else
 		{
 			_secondaryColor.g = amount;
-			secondaryPreview.color = _secondaryColor;
+			_secondaryPreview.color = _secondaryColor;
 		}
 
 		_greenText.text = (255f * amount).ToString("0");
@@ -94,15 +90,15 @@ public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
 		if (primaryColorSelected)
 		{
 			_primaryColor.b = amount;
-			primaryPreview.color = _primaryColor;
+			_primaryPreview.color = _primaryColor;
 
 			if (sameAsPrimaryToggle.isOn)
-				secondaryPreview.color = _primaryColor;
+				_secondaryPreview.color = _primaryColor;
 		}
 		else
 		{
 			_secondaryColor.b = amount;
-			secondaryPreview.color = _secondaryColor;
+			_secondaryPreview.color = _secondaryColor;
 		}
 
 		_blueText.text = (255f * amount).ToString("0");
@@ -113,13 +109,7 @@ public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
 		SetSlidersInteractable(!state);
 		UserSettings.SecondaryColorSameAsPrimary = state;
 
-		secondaryPreview.color = state ? _primaryColor : _secondaryColor;
-	}
-
-	public void ConfirmChanges()
-	{
-		GameDataManager.Instance.SaveGame();
-		gameObject.SetActive(false);
+		_secondaryPreview.color = state ? _primaryColor : _secondaryColor;
 	}
 
 	public void OnColorCategoryChanged(bool primary)
@@ -150,11 +140,11 @@ public class CustomizationMenu : MonoBehaviour, ISaveDataTransceiver
 		blueSlider.value = color.b;
 	}
 
-	private void ReloadUI()
+	protected override void ReloadUI()
 	{
 		sameAsPrimaryToggle.isOn = UserSettings.SecondaryColorSameAsPrimary;
 
-		secondaryPreview.color = sameAsPrimaryToggle.isOn ? _primaryColor : _secondaryColor;
+		_secondaryPreview.color = sameAsPrimaryToggle.isOn ? _primaryColor : _secondaryColor;
 	}
 
 	private void SetSlidersInteractable(bool isActive)

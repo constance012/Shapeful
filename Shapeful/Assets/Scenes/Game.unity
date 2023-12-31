@@ -9154,6 +9154,7 @@ MonoBehaviour:
   graphics: {fileID: 287294990}
   primaryRenderer: {fileID: 806722089}
   secondaryRenderer: {fileID: 1130224743}
+  damageFlashOverlayRenderer: {fileID: 1712561530}
   powerUpVisualRenderer: {fileID: 456410986}
   moveSpeed: 350
   maxHealth: 3

@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour
 
 	private IEnumerator Start()
 	{
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
 		_hasStartedUp = false;
 #endif
 
