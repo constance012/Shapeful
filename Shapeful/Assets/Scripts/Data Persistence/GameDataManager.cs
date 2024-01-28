@@ -17,6 +17,9 @@ namespace CSTGames.DataPersistence
 		[SerializeField] private string fileName;
 		[ReadOnly] public bool useEncryption;
 
+		public SaveFileHandler<GameData> DisposableHandler =>
+			new SaveFileHandler<GameData>(Application.persistentDataPath, subFolder, fileName, useEncryption);
+
 		// Private fields.
 		private List<ISaveDataTransceiver> _transceivers;
 		private SaveFileHandler<GameData> _saveHandler;
@@ -109,7 +112,10 @@ namespace CSTGames.DataPersistence
 			if (_currentData != null)
 			{
 				foreach (ISaveDataTransceiver transceiver in _transceivers)
-					transceiver.LoadData(_currentData);
+				{
+					if (transceiver.Ready)
+						transceiver.LoadData(_currentData);
+				}
 			}
 		}
 

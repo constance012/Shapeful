@@ -6,8 +6,10 @@ using static IconCustomizeMenu;
 public class SelectableUISlot : Button
 {
 	[Header("References"), Space]
+	[SerializeField] private Image staticSprite;
 	[SerializeField] private Image primarySprite;
 	[SerializeField] private Image secondarySprite;
+
 	[SerializeField] private GameObject selectedBorder;
 
 	[SerializeField] private GameObject lockOverlay;
@@ -16,6 +18,7 @@ public class SelectableUISlot : Button
 	public PlayerIcon Icon => _displayIcon;
 	public int IconIndex => _displayIcon.index;
 	public bool HasUnlocked => !_displayIcon.isLocked;
+	public int UnlockCost { get; private set; }
 
 	// Private fields.
 	private PlayerIcon _displayIcon;
@@ -24,6 +27,7 @@ public class SelectableUISlot : Button
 	{
 		primarySprite.sprite = null;
 		secondarySprite.sprite = null;
+		staticSprite.sprite = null;
 
 		gameObject.SetActive(false);
 	}
@@ -32,10 +36,12 @@ public class SelectableUISlot : Button
 	{
 		_displayIcon = icon;
 
-		primarySprite.sprite = _displayIcon.primary;
-		secondarySprite.sprite = _displayIcon.secondary;
+		primarySprite.sprite = _displayIcon.primarySprite;
+		secondarySprite.sprite = _displayIcon.secondarySprite;
+		staticSprite.sprite = _displayIcon.staticSprite;
 
-		unlockText.text = $"Cost: {_displayIcon.unlockCost}";
+		unlockText.text = $"{_displayIcon.unlockCost}";
+		UnlockCost = _displayIcon.unlockCost;
 		lockOverlay.SetActive(_displayIcon.isLocked);
 
 		gameObject.SetActive(true);
@@ -51,11 +57,9 @@ public class SelectableUISlot : Button
 		selectedBorder.SetActive(IconIndex == iconIndex);
 	}
 
-	public bool TryUnlockIcon()
+	public void Unlock()
 	{
 		lockOverlay.SetActive(false);
 		_displayIcon.isLocked = false;
-
-		return true;
 	}
 }

@@ -26,11 +26,11 @@ public class ColorCustomizeMenu : AppearanceMenu, ISaveDataTransceiver
 		_redText = redSlider.GetComponentInChildren<TextMeshProUGUI>("Value");
 		_greenText = greenSlider.GetComponentInChildren<TextMeshProUGUI>("Value");
 		_blueText = blueSlider.GetComponentInChildren<TextMeshProUGUI>("Value");
-		
-		base.Awake();
 	}
 
 	#region Interface Methods.
+	public bool Ready => _primaryPreview != null;
+
 	public void SaveData(GameData data)
 	{
 		data.primaryColor = _primaryColor;

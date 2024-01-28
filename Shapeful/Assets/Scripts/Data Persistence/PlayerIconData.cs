@@ -3,11 +3,14 @@ using UnityEngine;
 
 namespace CSTGames.DataPersistence
 {
+	public enum PlayerSpriteLayer { Primary, Secondary, Static }
+
 	[Serializable]
 	public class PlayerIconData
 	{
 		[HideInInspector] public int index;
 		public string iconName;
+		public byte[] staticTextureData;
 		public byte[] primaryTextureData;
 		public byte[] secondaryTextureData;
 
@@ -15,10 +18,14 @@ namespace CSTGames.DataPersistence
 		[NonSerialized] public const int PIXEL_PER_UNIT = 17;
 		[NonSerialized] public readonly Vector2 pivot = Vector2.one * .5f;
 
+		public bool IsDefault => this.index == -1;
+
 		public PlayerIconData()
 		{
 			this.index = -1;
-			this.iconName = "default_icon";
+			this.iconName = "Icon_Default";
+
+			this.staticTextureData = null;
 			this.primaryTextureData = null;
 			this.secondaryTextureData = null;
 		}
@@ -27,26 +34,32 @@ namespace CSTGames.DataPersistence
 		{
 			this.index = playerIcon.index;
 			this.iconName = playerIcon.iconName;
-			this.primaryTextureData = playerIcon.primary.GetSlicedTexture().EncodeToPNG();
-			this.secondaryTextureData = playerIcon.secondary.GetSlicedTexture().EncodeToPNG();
+
+			this.staticTextureData = playerIcon.staticSprite.GetSlicedTexture().EncodeToPNG();
+			this.primaryTextureData = playerIcon.primarySprite.GetSlicedTexture().EncodeToPNG();
+			this.secondaryTextureData = playerIcon.secondarySprite.GetSlicedTexture().EncodeToPNG();
 		}
 
-		public Sprite ReconstructPrimarySprite()
+		public Sprite ReconstructSprite(PlayerSpriteLayer layer)
 		{
 			Texture2D tex = new Texture2D(1, 1);
 
 			tex.filterMode = FilterMode.Point;
-			tex.LoadImage(primaryTextureData);
 
-			return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), pivot, PIXEL_PER_UNIT);
-		}
+			switch (layer)
+			{
+				case PlayerSpriteLayer.Static:
+					tex.LoadImage(staticTextureData);
+					break;
 
-		public Sprite ReconstructSecondarySprite()
-		{
-			Texture2D tex = new Texture2D(1, 1);
-
-			tex.filterMode = FilterMode.Point;
-			tex.LoadImage(secondaryTextureData);
+				case PlayerSpriteLayer.Secondary:
+					tex.LoadImage(secondaryTextureData);
+					break;
+				
+				case PlayerSpriteLayer.Primary:
+					tex.LoadImage(primaryTextureData);
+					break;
+			}
 
 			return Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), pivot, PIXEL_PER_UNIT);
 		}

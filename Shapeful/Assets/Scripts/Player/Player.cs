@@ -13,7 +13,9 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 	[SerializeField] private GameObject graphics;
 	[SerializeField] private SpriteRenderer primaryRenderer;
 	[SerializeField] private SpriteRenderer secondaryRenderer;
-	[SerializeField] private SpriteRenderer damageFlashOverlayRenderer;
+	[SerializeField] private SpriteRenderer staticRenderer;
+
+	[Space, SerializeField] private SpriteRenderer damageFlashOverlayRenderer;
 	[SerializeField] private SpriteRenderer powerUpVisualRenderer;
 
 	[Header("Move Speed"), Space]
@@ -99,13 +101,15 @@ public class Player : MonoBehaviour, ISaveDataTransceiver
 	}
 
 	#region Interface Methods.
+	public bool Ready => staticRenderer != null;
+
 	public void SaveData(GameData data) { }
 
 	public void LoadData(GameData data)
 	{
-		primaryRenderer.sprite = data.playerIconData.ReconstructPrimarySprite();
-		secondaryRenderer.sprite = data.playerIconData.ReconstructSecondarySprite();
-		damageFlashOverlayRenderer.sprite = primaryRenderer.sprite;
+		staticRenderer.sprite = data.playerIconData.ReconstructSprite(PlayerSpriteLayer.Static);
+		primaryRenderer.sprite = data.playerIconData.ReconstructSprite(PlayerSpriteLayer.Primary);
+		secondaryRenderer.sprite = data.playerIconData.ReconstructSprite(PlayerSpriteLayer.Secondary);
 
 		primaryRenderer.color = data.primaryColor;
 		secondaryRenderer.color = UserSettings.SecondaryColorSameAsPrimary ? data.primaryColor : data.secondaryColor;

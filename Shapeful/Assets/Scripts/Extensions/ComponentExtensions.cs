@@ -12,6 +12,10 @@ public static class ComponentExtensions
 	public static TComponent GetComponentInChildren<TComponent>(this Component component, string childName) where TComponent : Component
 	{
 		Transform child = component.transform.Find(childName);
+
+		if (child == null)
+			Debug.LogWarning($"Child with name {childName} of {component.name} was not found!");
+		
 		return child.GetComponent<TComponent>();
 	}
 

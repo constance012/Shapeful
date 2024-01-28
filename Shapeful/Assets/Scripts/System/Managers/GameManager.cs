@@ -16,24 +16,13 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	[SerializeField, Tooltip("Duration before returning to normal speed, in seconds.")]
 	private float slowDownDuration;
 
-	[Header("Rewarded Content Settings"), Space]
-	[SerializeField] private RewardedAdsButton continueButton;
-
-	[SerializeField, Tooltip("The required cooldown for a continue game attempt. In SECONDS.")]
-	private double continueAttemptCooldown;
-	[SerializeField] private TextMeshProUGUI continueAttemptText;
-
 	[Header("UI References"), Space]
 	[SerializeField] private TextMeshProUGUI gameScoreText;
 	[SerializeField] private TextMeshProUGUI healthText;
-
-	[Space]
-	[SerializeField] private TextMeshProUGUI highscoreText;
-	[SerializeField] private TextMeshProUGUI summaryScoreText;
 	
 	[Space]
+	[SerializeField] private GameSummaryBox gameSummary;
 	[SerializeField] private GameObject playerUI;
-	[SerializeField] private GameObject gameOverPanel;
 	[SerializeField] private GameObject pauseMenuPanel;
 
 	[Space]
@@ -47,7 +36,6 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	public int CurrentScore => _score;
 	public int ScoreMultiplier { get; set; } = 1;
 	public float DamageReduction { get; set; } = 0f;
-
 	public bool GameOver { get; private set; }
 	public static bool IsPause { get; private set; }
 
@@ -56,7 +44,6 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 
 	private Animator _gameScoreAnimator;
 	private DateTime _dataLastLoaded;
-	private CooldownBasedData _continueAttempts;
 
 	private int _highscore = 0;
 	private int _score = 0;
@@ -73,9 +60,7 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 		base.Awake();
 
 		_gameScoreAnimator = gameScoreText.GetComponentInParent<Animator>();
-		_continueAttempts = new CooldownBasedData(MAX_CONTINUE_ATTEMPT, continueAttemptCooldown);
-
-		Debug.Log("Game manager awoken.");
+		gameSummary.Initialize();
 	}
 
 	private void Start()
@@ -94,32 +79,21 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	private void Update()
 	{
 		SpeedUpTime();
-
-		if (GameOver && _continueAttempts.IsOnCooldown)
-		{
-			// TODO - Increase the attempt when the cooldown is finished.
-			_continueAttempts.RemainingCD -= TimeSpan.FromSeconds(Time.deltaTime);
-
-			continueButton.SetStatus(_continueAttempts.value >= 1, _continueAttempts.NextValueRemainingCD);
-			continueAttemptText.text = $"REMAINING ATTEMPTS: <color=#AE2929> {_continueAttempts.value} </color>";
-		}
+		gameSummary.UpdateContinueAttemptCooldown();
 	}
 
-	#region Save and Load Data.
-	public void LoadData(GameData data)
-	{
-		_highscore = data.highscore;
-
-		_dataLastLoaded = DateTime.FromBinary(data.lastUpdated);
-
-		_continueAttempts.LoadValueSinceLastPlayed(data);
-	}
+	#region Save and Load Data
+	public bool Ready => true;
 
 	public void SaveData(GameData data)
 	{
 		data.highscore = _highscore;
-		data.continueAttempts = _continueAttempts.value;
-		data.ContinueAttemptRemainingCD = _continueAttempts.FromRemainingCD();
+	}
+	
+	public void LoadData(GameData data)
+	{
+		_highscore = data.highscore;
+		_dataLastLoaded = DateTime.FromBinary(data.lastUpdated);
 	}
 	#endregion
 
@@ -136,9 +110,9 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 
 		if (currentHealth <= 0)
 		{
-			_continueAttempts.RemainingCD -= (DateTime.Now - _dataLastLoaded);
-
 			GameOver = true;
+
+			gameSummary.ContinueAttempts.RemainingCD -= (DateTime.Now - _dataLastLoaded);
 
 			onGameOver?.Invoke();
 			Invoke("ShowGameOverScreen", 1.5f);
@@ -150,17 +124,17 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 	#region UI Callback Methods
 	public void ContinueGame()
 	{
-		if (_continueAttempts.value > 0)
+		if (gameSummary.AllowContinue)
 		{
 			_dataLastLoaded = DateTime.Now;
 
 			GameOver = false;
 			onGameContinue?.Invoke();
 
-			gameOverPanel.SetActive(false);
+			gameSummary.Hide();
 			playerUI.SetActive(true);
 
-			_continueAttempts.UnaryDecrement();
+			gameSummary.ContinueAttempts.UnaryDecrement();
 		}
 	}
 
@@ -216,26 +190,14 @@ public class GameManager : Singleton<GameManager>, ISaveDataTransceiver
 
 	private void ShowGameOverScreen()
 	{
-		if (_score > _highscore)
-		{
-			highscoreText.text = $"<color=#B02E2E> NEW BEST: {_score} </color>";
-			summaryScoreText.text = $"----------------\nGOOD JOB, MATE!";
-
-			_highscore = _score;
-		}
-		else
-		{
-			highscoreText.text = $"BEST: {_highscore}";
-			summaryScoreText.text = $"----------------\nCURRENT: {_score}";
-		}
-
-		continueAttemptText.text = $"REMAINING ATTEMPTS: <color=#AE2929> {_continueAttempts.value} </color>";
-		
-		GameDataManager.Instance.SaveGame();
-		PowerUpManager.Instance.ForceRemoveAll();
-
 		playerUI.SetActive(false);
-		gameOverPanel.SetActive(true);
+
+		gameSummary.CalculateGemShards(_score, DateTime.Now - _dataLastLoaded);
+		gameSummary.Show(_score, _highscore);
+		_highscore = Mathf.Max(_score, _highscore);
+		
+		PowerUpManager.Instance.ForceRemoveAll();
+		GameDataManager.Instance.SaveGame();
 
 		InterstitialAdsManager.Instance.TryShowAd();
 	}
